@@ -29,7 +29,7 @@ var playerTopVelocity : float = 0.0
 #All node path exports
 @export var headPath: NodePath
 @export var speedReadout: NodePath
-@export var mouseSens = .2
+@export var mouseSens = .1
 
 func _ready():
 	head = get_node(headPath) #Gets the head

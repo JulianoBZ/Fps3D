@@ -17,6 +17,9 @@ func set_loadout(wn1,wn2,wn3):
 	$Primary.set_weapon(wn1)
 	$Secondary.set_weapon(wn2)
 	$Melee.set_weapon(wn3)
+	wn1.player = get_parent().get_parent()
+	wn2.player = get_parent().get_parent()
+	wn3.player = get_parent().get_parent()
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -39,8 +42,9 @@ func change_weapon():
 		if each.type == current_weapon:
 			each.is_equipped = true
 			each.show()
-			get_parent().get_node("HUD").update_weapon_ui(each.weapon_name)
+			get_parent().get_node("HUD").update_weapon_ui(each.weapon_name,each.ammo_clip,each.ammo_reserve)
+			each.get_child(0).is_equipped = true
 		else:
-			each.is_equipped = false
+			each.get_child(0).is_equipped = false
 			each.hide()
 

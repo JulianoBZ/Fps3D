@@ -1,6 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://dcj3bxk3065cb"]
+[gd_scene load_steps=3 format=3 uid="uid://bq0aflywq48qj"]
 
 [ext_resource type="Script" path="res://Weapon_Node.gd" id="1_43l85"]
+[ext_resource type="Script" path="res://weapon_scripts/Unarmed_Logic.gd" id="2_pp6ff"]
 
 [node name="Unarmed" type="Node3D"]
 script = ExtResource("1_43l85")
+
+[node name="WeaponLogic" type="Node3D" parent="."]
+script = ExtResource("2_pp6ff")
+
+[node name="Timer" type="Timer" parent="WeaponLogic"]
+one_shot = true
+
+[connection signal="timeout" from="WeaponLogic/Timer" to="WeaponLogic" method="_on_timer_timeout"]

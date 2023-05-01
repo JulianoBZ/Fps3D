@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://1vb7fpskqymc"]
+[gd_scene load_steps=5 format=3 uid="uid://c1knmk0f14p6a"]
 
 [ext_resource type="Script" path="res://Weapon_Node.gd" id="1_uhyx8"]
+[ext_resource type="Script" path="res://weapon_scripts/Rifle_A_Logic.gd" id="2_ottc8"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bostw"]
 albedo_color = Color(0.156863, 0.156863, 0.156863, 1)
@@ -10,6 +11,12 @@ material = SubResource("StandardMaterial3D_bostw")
 
 [node name="Rifle_A" type="Node3D"]
 script = ExtResource("1_uhyx8")
+
+[node name="WeaponLogic" type="Node3D" parent="."]
+script = ExtResource("2_ottc8")
+
+[node name="Timer" type="Timer" parent="WeaponLogic"]
+one_shot = true
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -33,3 +40,5 @@ skeleton = NodePath("../../../..")
 transform = Transform3D(0.02, 0, 0, 0, 0.0733611, 0.00623735, 0, -0.0155934, 0.0293444, 0, 0.000752147, -0.0269575)
 mesh = SubResource("BoxMesh_ok54c")
 skeleton = NodePath("../../../..")
+
+[connection signal="timeout" from="WeaponLogic/Timer" to="WeaponLogic" method="_on_timer_timeout"]
