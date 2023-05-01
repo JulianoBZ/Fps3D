@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://1vb7fpskqymc"]
+
+[ext_resource type="Script" path="res://Weapon_Node.gd" id="1_uhyx8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bostw"]
+albedo_color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ok54c"]
+material = SubResource("StandardMaterial3D_bostw")
+
+[node name="Rifle_A" type="Node3D"]
+script = ExtResource("1_uhyx8")
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="Anchor" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+
+[node name="Body" type="Node3D" parent="Root/Anchor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+
+[node name="Upper" type="MeshInstance3D" parent="Root/Anchor/Body"]
+transform = Transform3D(0.02, 0, 0, 0, 0.03, 0, 0, 0, 0.25, 0, 0.035, -0.142)
+mesh = SubResource("BoxMesh_ok54c")
+skeleton = NodePath("../../../..")
+
+[node name="Lower A" type="MeshInstance3D" parent="Root/Anchor/Body"]
+transform = Transform3D(0.02, 0, 0, 0, 0.062482, -0.00826912, 0, 0.0179164, 0.0288379, 0, -0.00545843, -0.131418)
+mesh = SubResource("BoxMesh_ok54c")
+skeleton = NodePath("../../../..")
+
+[node name="Lower B" type="MeshInstance3D" parent="Root/Anchor/Body"]
+transform = Transform3D(0.02, 0, 0, 0, 0.0733611, 0.00623735, 0, -0.0155934, 0.0293444, 0, 0.000752147, -0.0269575)
+mesh = SubResource("BoxMesh_ok54c")
+skeleton = NodePath("../../../..")

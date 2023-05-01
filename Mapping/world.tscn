@@ -1,0 +1,48 @@
+[gd_scene load_steps=9 format=3 uid="uid://cl1ok5lbvpp8k"]
+
+[ext_resource type="Script" path="res://Mapping/world.gd" id="1_fka84"]
+[ext_resource type="PackedScene" uid="uid://dtrjqfx1lapx0" path="res://Mapping/object.tscn" id="2_odvqu"]
+[ext_resource type="Texture2D" uid="uid://cauu0bn1gpvb3" path="res://Mapping/evening_road_01_puresky_4k.exr" id="3_uarhp"]
+[ext_resource type="PackedScene" uid="uid://k5l6wcim5r2h" path="res://PMove/QPlayer.tscn" id="4_vumrc"]
+[ext_resource type="PackedScene" uid="uid://duks15jdepbp5" path="res://placeholder_enemy.tscn" id="5_rfeqr"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_t0br6"]
+panorama = ExtResource("3_uarhp")
+
+[sub_resource type="Sky" id="Sky_8l5qf"]
+sky_material = SubResource("PanoramaSkyMaterial_t0br6")
+
+[sub_resource type="Environment" id="Environment_f3nkb"]
+background_mode = 2
+background_color = Color(1, 1, 1, 0)
+sky = SubResource("Sky_8l5qf")
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_fka84")
+
+[node name="Object" parent="." instance=ExtResource("2_odvqu")]
+transform = Transform3D(207.091, 0, 0, 0, 0.709942, 0, 0, 0, 285.785, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_f3nkb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15419, 13.0524, -56.1304)
+
+[node name="Object7" parent="." instance=ExtResource("2_odvqu")]
+transform = Transform3D(3.16281, 0, 0, 0, 1, 0, 0, 0, 6.61301, 0, 9.48025, -11.8285)
+
+[node name="Object8" parent="." instance=ExtResource("2_odvqu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.20373, 0.805233, -8.21778)
+
+[node name="Object9" parent="." instance=ExtResource("2_odvqu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.805233, -5.40357)
+
+[node name="Object10" parent="." instance=ExtResource("2_odvqu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.79876, 0.805233, -11.8285)
+
+[node name="Player" parent="." instance=ExtResource("4_vumrc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.78194, 0)
+
+[node name="PlaceholderEnemy" parent="." instance=ExtResource("5_rfeqr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.40594, -12)

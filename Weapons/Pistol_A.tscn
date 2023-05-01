@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://breiejg5jedhd"]
+
+[ext_resource type="Script" path="res://Weapon_Node.gd" id="1_hp3p0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c2cwh"]
+albedo_color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wf17l"]
+material = SubResource("StandardMaterial3D_c2cwh")
+
+[node name="Pistol_A" type="Node3D"]
+script = ExtResource("1_hp3p0")
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="Anchor" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+
+[node name="Body" type="Node3D" parent="Root/Anchor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+
+[node name="Upper" type="MeshInstance3D" parent="Root/Anchor/Body"]
+transform = Transform3D(0.02, 0, 0, 0, 0.03, 0, 0, 0, 0.15, 0, 0.041, -0.095)
+mesh = SubResource("BoxMesh_wf17l")
+skeleton = NodePath("../../../..")
+
+[node name="Lower" type="MeshInstance3D" parent="Root/Anchor/Body"]
+transform = Transform3D(0.0197124, 0, 0, 0, 0.077959, 0.00443124, 0, -0.0118166, 0.0292346, 0, 0.00455573, -0.0302134)
+mesh = SubResource("BoxMesh_wf17l")
+skeleton = NodePath("../../../..")

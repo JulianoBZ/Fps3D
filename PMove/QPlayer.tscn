@@ -1,0 +1,90 @@
+[gd_scene load_steps=9 format=3 uid="uid://k5l6wcim5r2h"]
+
+[ext_resource type="Script" path="res://PMove/QPlayer.gd" id="1_vsa8p"]
+[ext_resource type="Script" path="res://PMove/weapon_manager.gd" id="2_42aew"]
+[ext_resource type="Script" path="res://PMove/cmd.gd" id="2_kxnac"]
+[ext_resource type="Script" path="res://weapon.gd" id="3_lfkkt"]
+[ext_resource type="PackedScene" uid="uid://chmgiae1nj11t" path="res://Weapons/hud.tscn" id="5_s0b5w"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_s8q0e"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ylt4f"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ds6n7"]
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00593483, 0)
+script = ExtResource("1_vsa8p")
+headPath = NodePath("Head")
+speedReadout = NodePath("Control/readSpeed")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+current = true
+
+[node name="RayCast3D" type="RayCast3D" parent="Head/Camera3D"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="Weapons" type="Node3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.1, 0)
+script = ExtResource("2_42aew")
+
+[node name="Primary" type="Node3D" parent="Head/Weapons" node_paths=PackedStringArray("raycast")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.206328, 1.86001, -0.596547)
+script = ExtResource("3_lfkkt")
+type = 1
+raycast = NodePath("../../Camera3D/RayCast3D")
+
+[node name="Secondary" type="Node3D" parent="Head/Weapons" node_paths=PackedStringArray("raycast")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.206, 1.86, -0.597)
+script = ExtResource("3_lfkkt")
+type = 2
+raycast = NodePath("../../Camera3D/RayCast3D")
+
+[node name="Melee" type="Node3D" parent="Head/Weapons" node_paths=PackedStringArray("raycast")]
+script = ExtResource("3_lfkkt")
+raycast = NodePath("../../Camera3D/RayCast3D")
+
+[node name="HUD" parent="Head" instance=ExtResource("5_s0b5w")]
+
+[node name="Body" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("CapsuleShape3D_s8q0e")
+
+[node name="Mesh" type="MeshInstance3D" parent="Body"]
+mesh = SubResource("CapsuleMesh_ylt4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+shape = SubResource("CapsuleShape3D_ds6n7")
+disabled = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1.0
+offset_top = 354.0
+offset_right = 460.0
+offset_bottom = 474.0
+
+[node name="Speed" type="Label" parent="Control"]
+layout_mode = 0
+offset_right = 81.0
+offset_bottom = 22.0
+text = "Speed: "
+
+[node name="readSpeed" type="Label" parent="Control"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 56.0
+offset_top = 1.0
+offset_right = 261.0
+offset_bottom = 78.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Cmd" type="Node3D" parent="."]
+script = ExtResource("2_kxnac")
