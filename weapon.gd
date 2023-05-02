@@ -13,6 +13,7 @@ var uneq_anim
 var weapon_name = ""
 var is_equipped = false
 
+#Baseado na cena de arma, pega os dados da cena da arma para cálculos
 func set_weapon(wn):
 	weapon_node = wn
 	var w = weapon_node
@@ -28,4 +29,6 @@ func set_weapon(wn):
 	weapon_name = w.get_node("WeaponLogic").weapon_name
 	w.player = get_parent().get_parent().get_parent()
 	
-	
+func update_weapon_state(ar,ac):
+	ammo_reserve = ar
+	ammo_clip = ac

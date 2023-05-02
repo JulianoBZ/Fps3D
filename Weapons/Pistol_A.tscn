@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bkmtqbu5o522"]
+[gd_scene load_steps=8 format=3 uid="uid://bkmtqbu5o522"]
 
 [ext_resource type="Script" path="res://Weapon_Node.gd" id="1_hp3p0"]
 [ext_resource type="Script" path="res://weapon_scripts/Pistol_A_Logic.gd" id="2_tfc1j"]
@@ -9,13 +9,50 @@ albedo_color = Color(0.156863, 0.156863, 0.156863, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_wf17l"]
 material = SubResource("StandardMaterial3D_c2cwh")
 
+[sub_resource type="Animation" id="Animation_suhsx"]
+resource_name = "reload"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Anchor:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.5708, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dauch"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Anchor:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mxr01"]
+_data = {
+"RESET": SubResource("Animation_dauch"),
+"reload": SubResource("Animation_suhsx")
+}
+
 [node name="Pistol_A" type="Node3D"]
 script = ExtResource("1_hp3p0")
 
 [node name="WeaponLogic" type="Node3D" parent="."]
 script = ExtResource("2_tfc1j")
 
-[node name="Timer" type="Timer" parent="WeaponLogic"]
+[node name="fire_timer" type="Timer" parent="WeaponLogic"]
 one_shot = true
 
 [node name="Root" type="Node3D" parent="."]
@@ -36,4 +73,10 @@ transform = Transform3D(0.0197124, 0, 0, 0, 0.077959, 0.00443124, 0, -0.0118166,
 mesh = SubResource("BoxMesh_wf17l")
 skeleton = NodePath("../../../..")
 
-[connection signal="timeout" from="WeaponLogic/Timer" to="WeaponLogic" method="_on_timer_timeout"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_mxr01")
+}
+
+[connection signal="timeout" from="WeaponLogic/fire_timer" to="WeaponLogic" method="_on_fire_timer_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="WeaponLogic" method="_on_animation_player_animation_finished"]

@@ -6,13 +6,14 @@ var pistol_a = preload("res://Weapons/Pistol_A.tscn").instantiate()
 var rifle_a = preload("res://Weapons/Rifle_A.tscn").instantiate()
 var melee = preload("res://Weapons/unarmed.tscn").instantiate()
 
-# Called when the node enters the scene tree for the first time.
+# Inicializa o loadout e inicia com a arma primária selecionada
 func _ready():
 	current_weapon = 1
 	set_loadout(rifle_a,pistol_a,melee)
 	change_weapon()
 	pass # Replace with function body.
 
+#Inicializa o loadout
 func set_loadout(wn1,wn2,wn3):
 	$Primary.set_weapon(wn1)
 	$Secondary.set_weapon(wn2)
@@ -28,6 +29,7 @@ func _process(delta):
 	change_weapon()
 	pass
 
+#Troca de arma baseada no Input, e define se está equipada no loop for
 func change_weapon():
 	if Input.is_action_just_pressed("Primary") || current_weapon == 1:
 		current_weapon = 1

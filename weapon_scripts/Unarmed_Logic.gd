@@ -11,12 +11,14 @@ var ammo_clip = 0
 var eq_anim
 var uneq_anim
 
+var range = 3.2
+var damage = 10
 var can_fire = true
-
 
 func _ready():
 	timer.one_shot = true
-	
+
+#Sempre calcula se shoot() está disponível baseado em can_fire e raycast inserido
 func _process(_delta):
 	shoot(get_parent().raycast_path)
 
@@ -24,8 +26,9 @@ func shoot(rc):
 	if Input.is_action_pressed("shoot") && get_parent().is_equipped == true:
 		if can_fire:
 			var target = rc.get_collider()
-			if target != null && target.is_in_group("Enemy") && get_parent().player.global_position.distance_to(target.global_position) < 3.2:
-				target.health -= 10
+			#Só aplica o dano se o target estiver dentro de um range
+			if target != null && target.is_in_group("Enemy") && get_parent().player.global_position.distance_to(target.global_position) < range:
+				target.health -= damage
 				print(target,weapon_name)
 				print(get_parent().player.global_position.distance_to(target.global_position))
 			timer.start(fire_rate)
