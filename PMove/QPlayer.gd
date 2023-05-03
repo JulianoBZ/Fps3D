@@ -10,11 +10,11 @@ var wishJump = false
 var deltaTime : float
 @export var gravity  : float = 20
 @export var friction : float = 6
-@export var moveSpeed              : float = 12   # Ground move speed
-@export var runAcceleration        : float = 24    # Ground accel
+@export var moveSpeed              : float = 10   # Ground move speed
+@export var runAcceleration        : float = 20    # Ground accel
 @export var runDeacceleration      : float = 10    # Deacceleration that occurs when running on the ground
 @export var airAcceleration        : float = 2.0   # Air accel
-@export var airDeacceleration      : float = 2.0   # Deacceleration experienced when opposite strafing
+@export var airDeacceleration      : float = 10.0   # Deacceleration experienced when opposite strafing
 @export var airControl             : float = 0.3   # How precise air control is
 @export var jumpSpeed              : float = 8.0   # The speed at which the characters up axis gains when hitting jump
 @export var holdJumpToBhop         : bool = true  # When enabled allows player to just hold jump button to keep on bhopping perfectly
