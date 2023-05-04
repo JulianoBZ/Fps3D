@@ -1,5 +1,10 @@
 extends CharacterBody3D
 
+#Network
+#var Network_ID
+
+#Stats
+var player_class = Global.desired_class
 var head
 var speedLabel
 var grounded = false
@@ -32,6 +37,7 @@ var playerTopVelocity : float = 0.0
 @export var mouseSens = .1
 
 func _ready():
+	$Head/HUD.update_class_ui(Global.desired_class)
 	head = get_node(headPath) #Gets the head
 	speedLabel = get_node(speedReadout) #Gets the UI Element
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) #Sets the mouse to captured

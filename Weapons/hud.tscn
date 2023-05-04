@@ -11,22 +11,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gbo3j")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 596.0
-offset_right = 216.0
-offset_bottom = 716.0
-color = Color(0.231373, 0.231373, 0.231373, 1)
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 605.0
-offset_right = 198.0
-offset_bottom = 688.0
-text = "Weapon: "
-
 [node name="Crosshair" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -40,3 +24,45 @@ offset_right = 2.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Weapon_info" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="Weapon_info"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 596.0
+offset_right = 216.0
+offset_bottom = 716.0
+color = Color(0.231373, 0.231373, 0.231373, 1)
+
+[node name="Label" type="Label" parent="Weapon_info"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 605.0
+offset_right = 198.0
+offset_bottom = 688.0
+text = "Weapon: "
+
+[node name="Class_info" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="Class_info"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 564.0
+offset_right = 187.0
+offset_bottom = 595.0
+color = Color(0.231373, 0.231373, 0.231373, 1)
+
+[node name="Label" type="Label" parent="Class_info"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 567.0
+offset_right = 185.0
+offset_bottom = 594.0
+text = "Class: "

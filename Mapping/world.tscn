@@ -55,6 +55,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.40594, -13.6719)
 [node name="spawn1" type="Node3D" parent="Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.56435, 0)
 
+[node name="spawn2" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.56435, -23.1102)
+
+[node name="spawn3" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.0874, 3.56435, -10.2703)
+
+[node name="spawn4" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.3073, 3.56435, -9.85437)
+
 [node name="Players" type="Node" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -176,5 +185,11 @@ text = "Light"
 visible = false
 layout_mode = 2
 text = "Light"
+
+[node name="Network" type="Node" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://PMove/QPlayer.tscn", "res://Player_Node.tscn", "res://Weapons/Rifle_A.tscn")
+spawn_path = NodePath("../Network")
 
 [connection signal="pressed" from="Spawn_HUD/SpawnButton" to="." method="_on_spawn_button_pressed"]

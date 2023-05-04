@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6ugi83l6l5cp"]
+
+[ext_resource type="Script" path="res://Menus/Main_Scene.gd" id="1_yhchw"]
+
+[node name="Main_Scene" type="Node2D"]
+script = ExtResource("1_yhchw")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 469.0
+offset_top = 4.0
+offset_right = 800.0
+offset_bottom = 106.0
+theme_override_font_sizes/font_size = 30
+text = "Game"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Host_button" type="Button" parent="."]
+offset_left = 387.0
+offset_top = 506.0
+offset_right = 615.0
+offset_bottom = 605.0
+text = "Host"
+
+[node name="Join_button" type="Button" parent="."]
+offset_left = 752.0
+offset_top = 507.0
+offset_right = 980.0
+offset_bottom = 606.0
+text = "Join"
+
+[node name="IP_address_insert" type="TextEdit" parent="."]
+offset_left = 713.0
+offset_top = 424.0
+offset_right = 994.0
+offset_bottom = 481.0
+theme_override_font_sizes/font_size = 26
+placeholder_text = "192.168.0.1"
+
+[node name="Nickname" type="Label" parent="."]
+offset_left = 479.0
+offset_top = 137.0
+offset_right = 810.0
+offset_bottom = 239.0
+theme_override_font_sizes/font_size = 30
+text = "You Nickname:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player_name_insert" type="TextEdit" parent="Nickname"]
+offset_left = 29.0
+offset_top = 120.0
+offset_right = 310.0
+offset_bottom = 177.0
+theme_override_font_sizes/font_size = 26
+text = "zeggs"
+
+[connection signal="pressed" from="Host_button" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="Join_button" to="." method="_on_join_button_pressed"]
