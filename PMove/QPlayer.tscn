@@ -1,16 +1,28 @@
-[gd_scene load_steps=9 format=3 uid="uid://k5l6wcim5r2h"]
+[gd_scene load_steps=11 format=3 uid="uid://k5l6wcim5r2h"]
 
 [ext_resource type="Script" path="res://PMove/QPlayer.gd" id="1_vsa8p"]
 [ext_resource type="Script" path="res://PMove/weapon_manager.gd" id="2_42aew"]
 [ext_resource type="Script" path="res://PMove/cmd.gd" id="2_kxnac"]
 [ext_resource type="Script" path="res://weapon.gd" id="3_lfkkt"]
 [ext_resource type="PackedScene" uid="uid://chmgiae1nj11t" path="res://Weapons/hud.tscn" id="5_s0b5w"]
+[ext_resource type="Script" path="res://PMove/PlayerSync.gd" id="6_1nfw2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_s8q0e"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ylt4f"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ds6n7"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aoivw"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/2/path = NodePath("../Head/Camera3D:v_offset")
+properties/2/spawn = true
+properties/2/sync = true
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00593483, 0)
@@ -85,3 +97,8 @@ offset_bottom = 78.0
 
 [node name="Cmd" type="Node3D" parent="."]
 script = ExtResource("2_kxnac")
+
+[node name="Player_Sync" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath(".")
+replication_config = SubResource("SceneReplicationConfig_aoivw")
+script = ExtResource("6_1nfw2")

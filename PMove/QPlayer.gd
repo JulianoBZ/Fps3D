@@ -1,6 +1,8 @@
 extends CharacterBody3D
 
 #Network
+@onready var sync = $Player_Sync
+@onready var camera = $Head/Camera3D
 #var Network_ID
 
 #Stats
@@ -37,158 +39,176 @@ var playerTopVelocity : float = 0.0
 @export var mouseSens = .1
 
 func _ready():
+	
+	sync.set_multiplayer_authority(str(name).to_int())
+	camera.current = sync.is_multiplayer_authority()
+	
+	################################
+	
 	$Head/HUD.update_class_ui(Global.desired_class)
 	head = get_node(headPath) #Gets the head
 	speedLabel = get_node(speedReadout) #Gets the UI Element
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) #Sets the mouse to captured
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED) #Sets the mouse to captured
 
 func _input(event):
-	#This will rotate the head based off mouse movement
-	if event is InputEventMouseMotion:
-		rotate_y(deg_to_rad(-event.relative.x * mouseSens))
-		head.rotate_x(deg_to_rad(-event.relative.y * mouseSens))
-		head.rotation.x = clamp(head.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+	if sync.is_multiplayer_authority():
+		#This will rotate the head based off mouse movement
+		if event is InputEventMouseMotion && sync.is_multiplayer_authority():
+			rotate_y(deg_to_rad(-event.relative.x * mouseSens))
+			head.rotate_x(deg_to_rad(-event.relative.y * mouseSens))
+			head.rotation.x = clamp(head.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 
 func _physics_process(delta):
-	deltaTime = delta
-	# Quit the Game
-	if Input.is_action_just_pressed("ui_cancel"):
-		get_tree().quit()
-	
-	#Calls all functions based off if player is on the ground or not
-	QueueJump()
-	if is_on_floor():
-		GroundMove()
-	else:
-		AirMove()
-	
-	#This will move the player
-	set_velocity(playerVelocity)
-	set_up_direction(Vector3.UP)
-	move_and_slide()
-	
-	#Show the players current speed
-	speedLabel.text = str(playerVelocity.length())
+	if sync.is_multiplayer_authority():
+		deltaTime = delta
+		# Quit the Game
+		if Input.is_action_just_pressed("ui_cancel"):
+			get_tree().quit()
+		
+		#Calls all functions based off if player is on the ground or not
+		QueueJump()
+		if is_on_floor():
+			GroundMove()
+		else:
+			AirMove()
+		
+		#This will move the player
+		set_velocity(playerVelocity)
+		set_up_direction(Vector3.UP)
+		move_and_slide()
+		
+		#Show the players current speed
+		speedLabel.text = str(playerVelocity.length())
+		
+		##################
+		sync.position = position
+		sync.rotation = rotation
 
 func set_cmd():
-	#Sets forward move and right move
-	Cmd._set_forwardMove(-transform.basis.z * (Input.get_action_strength("forward") - Input.get_action_strength("backwards")))
-	Cmd._set_rightMove(-transform.basis.x * (Input.get_action_strength("left") - Input.get_action_strength("right")))
+	if sync.is_multiplayer_authority():
+		#Sets forward move and right move
+		Cmd._set_forwardMove(-transform.basis.z * (Input.get_action_strength("forward") - Input.get_action_strength("backwards")))
+		Cmd._set_rightMove(-transform.basis.x * (Input.get_action_strength("left") - Input.get_action_strength("right")))
 
 func QueueJump():
-	#This lets you queue the next jump
-	if holdJumpToBhop:
-		wishJump = Input.is_action_pressed("jump")
-		return
-	
-	if Input.is_action_just_pressed("jump"):
-		wishJump = true
-	
-	if Input.is_action_just_released("jump"):
-		wishJump = false;
+	if sync.is_multiplayer_authority():
+		#This lets you queue the next jump
+		if holdJumpToBhop:
+			wishJump = Input.is_action_pressed("jump")
+			return
+		
+		if Input.is_action_just_pressed("jump"):
+			wishJump = true
+		
+		if Input.is_action_just_released("jump"):
+			wishJump = false;
 
 func AirMove():
-	#Allows for movement to slightly increase as you move through the air
-	var wishdir : Vector3
-	#var wishvel : float = airAcceleration
-	var accel : float
-	
-	set_cmd()
-	
-	wishdir = Cmd.forwardmove + Cmd.rightmove
-	
-	var wishspeed = wishdir.length()
-	wishspeed *= moveSpeed
-	
-	wishdir.normalized()
-	moveDirectionNorm = wishdir
-	
-	var wishspeed2 = wishspeed
-	if playerVelocity.dot(wishdir) < 0:
-		accel = airDeacceleration
-	else:
-		accel = airAcceleration
-	
-	accelerate(wishdir, wishspeed, airAcceleration); # accel
-	
-	playerVelocity.y -= gravity * deltaTime
+	if sync.is_multiplayer_authority():
+		#Allows for movement to slightly increase as you move through the air
+		var wishdir : Vector3
+		#var wishvel : float = airAcceleration
+		var accel : float
+		
+		set_cmd()
+		
+		wishdir = Cmd.forwardmove + Cmd.rightmove
+		
+		var wishspeed = wishdir.length()
+		wishspeed *= moveSpeed
+		
+		wishdir.normalized()
+		moveDirectionNorm = wishdir
+		
+		var wishspeed2 = wishspeed
+		if playerVelocity.dot(wishdir) < 0:
+			accel = airDeacceleration
+		else:
+			accel = airAcceleration
+		
+		accelerate(wishdir, wishspeed, airAcceleration); # accel
+		
+		playerVelocity.y -= gravity * deltaTime
 
 func GroundMove():
-	#Allows for normal movement on the ground
-	var wishdir : Vector3
-	var wishvel : Vector3
-	
-	if !wishJump:
-		ApplyFriction(1.0)
-	else:
-		ApplyFriction(0)
-	
-	set_cmd()
-	
-	wishdir = Cmd.forwardmove + Cmd.rightmove
-	wishdir.normalized()
-	moveDirectionNorm = wishdir
-	
-	var wishspeed = wishdir.length()
-	wishspeed *= moveSpeed
-	
-	accelerate(wishdir, wishspeed, runAcceleration)
-	
-	playerVelocity.y = 0
-	
-	if wishJump:
-		playerVelocity.y = jumpSpeed
-		wishJump = false
-		$AudioStreamPlayer.play()
-	
+	if sync.is_multiplayer_authority():
+		#Allows for normal movement on the ground
+		var wishdir : Vector3
+		var wishvel : Vector3
+		
+		if !wishJump:
+			ApplyFriction(1.0)
+		else:
+			ApplyFriction(0)
+		
+		set_cmd()
+		
+		wishdir = Cmd.forwardmove + Cmd.rightmove
+		wishdir.normalized()
+		moveDirectionNorm = wishdir
+		
+		var wishspeed = wishdir.length()
+		wishspeed *= moveSpeed
+		
+		accelerate(wishdir, wishspeed, runAcceleration)
+		
+		playerVelocity.y = 0
+		
+		if wishJump:
+			playerVelocity.y = jumpSpeed
+			wishJump = false
+			$AudioStreamPlayer.play()
+		
 
 func ApplyFriction(t : float):
-	#Applys friction based off t
-	var vec : Vector3 = playerVelocity
-	var vel : float
-	var speed : float
-	var newspeed : float
-	var control : float
-	var drop : float
-	
-	vec.y = 0.0
-	speed = vec.length()
-	drop = 0.0
-	
-	if is_on_floor():
-		if speed < runDeacceleration:
-			control = runDeacceleration
-		else:
-			control = speed
+	if sync.is_multiplayer_authority():
+		#Applys friction based off t
+		var vec : Vector3 = playerVelocity
+		var vel : float
+		var speed : float
+		var newspeed : float
+		var control : float
+		var drop : float
 		
-		drop = control * friction * deltaTime * t;
-	
-	newspeed = speed - drop;
-	playerFriction = newspeed;
-	if newspeed < 0:
-		newspeed = 0
-	if speed > 0:
-		newspeed /= speed
-	
-	playerVelocity.x *= newspeed
-	playerVelocity.z *= newspeed
+		vec.y = 0.0
+		speed = vec.length()
+		drop = 0.0
+		
+		if is_on_floor():
+			if speed < runDeacceleration:
+				control = runDeacceleration
+			else:
+				control = speed
+			
+			drop = control * friction * deltaTime * t;
+		
+		newspeed = speed - drop;
+		playerFriction = newspeed;
+		if newspeed < 0:
+			newspeed = 0
+		if speed > 0:
+			newspeed /= speed
+		
+		playerVelocity.x *= newspeed
+		playerVelocity.z *= newspeed
 	
 
 func accelerate(wishdir : Vector3, wishspeed : float, accel : float):
-	#Allows the player to accelerate faster
-	var addspeed : float
-	var accelspeed : float
-	var currentspeed : float
-	
-	currentspeed = playerVelocity.dot(wishdir)
-	addspeed = wishspeed - currentspeed
-	if addspeed <= 0:
-		return
-	accelspeed = accel * deltaTime * wishspeed;
-	if accelspeed > addspeed:
-		accelspeed = addspeed
-	
-	playerVelocity.x += accelspeed * wishdir.x
-	playerVelocity.z += accelspeed * wishdir.z
+	if sync.is_multiplayer_authority():
+		#Allows the player to accelerate faster
+		var addspeed : float
+		var accelspeed : float
+		var currentspeed : float
+		
+		currentspeed = playerVelocity.dot(wishdir)
+		addspeed = wishspeed - currentspeed
+		if addspeed <= 0:
+			return
+		accelspeed = accel * deltaTime * wishspeed;
+		if accelspeed > addspeed:
+			accelspeed = addspeed
+		
+		playerVelocity.x += accelspeed * wishdir.x
+		playerVelocity.z += accelspeed * wishdir.z
 	
 
