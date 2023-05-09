@@ -27,7 +27,6 @@ func start_server(PORT):
 		OS.alert("Failed to start multiplayer server.")
 		return
 	multiplayer.multiplayer_peer = peer
-	Global.MP_ID = 1
 	return true
 
 func connect_to_server(IP_address, PORT):

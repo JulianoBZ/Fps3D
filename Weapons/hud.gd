@@ -7,3 +7,6 @@ func update_weapon_ui(weapon_name,weapon_current_ammo,weapon_reserve_ammo):
 
 func update_class_ui(pl_cl):
 	$Class_info/Label.text = "Class: "+str(pl_cl)
+
+func _process(delta):
+	$Health.text = "Health: "+str(get_parent().get_parent().health) +"/100"

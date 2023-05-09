@@ -20,9 +20,9 @@ func _ready():
 
 #Sempre calcula se shoot() está disponível baseado em can_fire e raycast inserido
 func _process(_delta):
-	shoot(get_parent().raycast_path)
+	Fire(get_parent().raycast_path)
 
-func shoot(rc):
+func Fire(rc):
 	if Input.is_action_pressed("shoot") && get_parent().is_equipped == true:
 		if can_fire:
 			var target = rc.get_collider()

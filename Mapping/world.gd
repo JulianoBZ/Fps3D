@@ -10,6 +10,8 @@ func _ready():
 	$Camera3D.make_current()
 	player_class_group = class_group
 	
+	Global.world_camera = $Camera3D
+	Global.world_spawn_hud = $Spawn_HUD
 	###########################
 #	# We only need to spawn players on the server.
 #	if not multiplayer.is_server():
@@ -39,12 +41,16 @@ func _process(delta):
 	
 
 func _on_spawn_button_pressed():
-	Global.desired_class = str(player_class_group.get_pressed_button().name)
-	print(Global.desired_class)
-	$Spawn_HUD.hide()
+	
 	if multiplayer.is_server():
+		Global.desired_class = str(player_class_group.get_pressed_button().name)
+		print(Global.desired_class)
+		$Spawn_HUD.hide()
 		spawn_player(multiplayer.get_unique_id())
 	else:
+		Global.desired_class = str(player_class_group.get_pressed_button().name)
+		print(Global.desired_class)
+		$Spawn_HUD.hide()
 		rpc_id(1,"spawn_from_server",multiplayer.get_unique_id())
 
 @rpc("any_peer","call_remote")

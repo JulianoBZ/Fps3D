@@ -11,6 +11,7 @@ var head
 var speedLabel
 var grounded = false
 var wishJump = false
+@export var health = 100
 @onready var Cmd = $Cmd
 
 # Movement Varabiles
@@ -43,23 +44,31 @@ func _ready():
 	sync.set_multiplayer_authority(str(name).to_int())
 	camera.current = sync.is_multiplayer_authority()
 	
-	################################
-	
-	$Head/HUD.update_class_ui(Global.desired_class)
-	head = get_node(headPath) #Gets the head
-	speedLabel = get_node(speedReadout) #Gets the UI Element
-	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED) #Sets the mouse to captured
+	print("Player Scene Authority: ",sync.get_multiplayer_authority())
+	############################################
+	if sync.is_multiplayer_authority():
+		$Head/HUD.show()
+		$Head/HUD.update_class_ui(Global.desired_class)
+		head = get_node(headPath) #Gets the head
+		speedLabel = get_node(speedReadout) #Gets the UI Element
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) #Sets the mouse to captured
 
 func _input(event):
 	if sync.is_multiplayer_authority():
 		#This will rotate the head based off mouse movement
-		if event is InputEventMouseMotion && sync.is_multiplayer_authority():
+		if event is InputEventMouseMotion:
 			rotate_y(deg_to_rad(-event.relative.x * mouseSens))
 			head.rotate_x(deg_to_rad(-event.relative.y * mouseSens))
 			head.rotation.x = clamp(head.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 
 func _physics_process(delta):
+	
+	#sync.health = health
+	
 	if sync.is_multiplayer_authority():
+		camera.current = sync.is_multiplayer_authority()
+		
+		
 		deltaTime = delta
 		# Quit the Game
 		if Input.is_action_just_pressed("ui_cancel"):
@@ -83,7 +92,25 @@ func _physics_process(delta):
 		##################
 		sync.position = position
 		sync.rotation = rotation
+		
+		if Input.is_action_just_pressed("kys"):
+			health = 0
+		death()
+###############################################################
 
+@rpc("any_peer")
+func take_damage(dmg):
+	health -= dmg
+
+func death():
+	if health <= 0:
+		queue_free()
+		Global.world_camera.make_current()
+		Global.world_spawn_hud.show()
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+
+############################################################
 func set_cmd():
 	if sync.is_multiplayer_authority():
 		#Sets forward move and right move

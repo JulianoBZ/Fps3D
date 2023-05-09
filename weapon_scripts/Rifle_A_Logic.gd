@@ -21,12 +21,12 @@ func _ready():
 
 #Sempre calcula se shoot() está disponível baseado em can_fire e raycast inserido
 func _process(_delta):
-	shoot(get_parent().raycast_path)
+	Fire(get_parent().raycast_path)
 	reload()
 	if animation_player.is_playing && get_parent().is_equipped == false:
 		animation_player.stop()
 
-func shoot(rc):
+func Fire(rc):
 	if Input.is_action_pressed("shoot") && get_parent().is_equipped == true:
 		if can_fire && ammo_clip > 0:
 			#Tira 1 bala do pente
@@ -34,11 +34,10 @@ func shoot(rc):
 			get_parent().get_parent().update_weapon_state(ammo_reserve,ammo_clip)
 			var target = rc.get_collider()
 			if target != null && target.is_in_group("Enemy"):
-				target.health -= damage
-				print(target,weapon_name)
+				target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
+				#print(get_parent().player.multiplayer.is_multiplayer_authority())
 			fire_timer.start(fire_rate)
 			can_fire = false
-
 
 func reload():
 	if Input.is_action_just_pressed("reload") && get_parent().is_equipped == true:

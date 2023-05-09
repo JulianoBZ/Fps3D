@@ -17,6 +17,7 @@ func _ready():
 	for adress in IP.get_local_addresses():
 		if adress.split(".").size() == 4 && adress.begins_with("192"):
 			$self_ip.text = str(adress)
+			$IP_address_insert.text = str(adress)
 
 func load_names(file):
 	var f = FileAccess.open(file, FileAccess.READ)

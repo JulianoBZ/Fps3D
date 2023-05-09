@@ -7,6 +7,13 @@ extends MultiplayerSynchronizer
 		else:
 			get_parent().set_multiplayer_authority(val)
 
+@export var health:int:
+	set(val):
+		if is_multiplayer_authority():
+			health = val
+		else:
+			get_parent().health = val
+
 @export var position:Vector3:
 	set(val):
 		if is_multiplayer_authority():

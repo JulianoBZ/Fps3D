@@ -66,3 +66,11 @@ offset_top = 567.0
 offset_right = 185.0
 offset_bottom = 594.0
 text = "Class: "
+
+[node name="Health" type="Label" parent="."]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 656.0
+offset_right = 198.0
+offset_bottom = 703.0
+text = "Health:"
