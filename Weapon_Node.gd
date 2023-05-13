@@ -9,6 +9,7 @@ var is_equipped = false
 
 func _ready():
 	set_raycast(get_parent().raycast)
+	player = get_parent().get_parent().get_parent().get_parent()
 
 #Até o momento o raycast serve para alimentar a lógica da arma
 func set_raycast(rc):

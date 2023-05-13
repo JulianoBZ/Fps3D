@@ -55,7 +55,7 @@ func _on_fire_timer_timeout():
 	can_fire = true
 
 
-func _on_animation_player_animation_finished(anim_name):
+func _on_animation_player_animation_finished(_anim_name):
 	if ammo_reserve > ammo_clip_max:
 		#Variavel auxiliar para calcular o quanto de munição deve ser recarregado
 		var aux = 0

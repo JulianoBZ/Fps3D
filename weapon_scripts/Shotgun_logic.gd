@@ -1,18 +1,18 @@
 extends Weapon_Node
 
-var fire_rate = 0.05
+var fire_rate = 0.8
 @onready var fire_timer = $fire_timer
 @onready var animation_player = get_parent().get_node("AnimationPlayer")
 
 @onready var bullet_impact = preload("res://Weapons/bullet_impact.tscn")
 
-var weapon_name = "Machine Gun"
-var ammo_reserve_max = 200
-var ammo_reserve = 200
-var ammo_clip_max = 200
-var ammo_clip = 200
+var weapon_name = "Shotgun"
+var ammo_reserve_max = 24
+var ammo_reserve = 24
+var ammo_clip_max = 24
+var ammo_clip = 24
 
-var damage = 3
+var damage = 6
 var can_fire = true
 
 var rand = RandomNumberGenerator.new()
@@ -42,34 +42,37 @@ func Fire(rc):
 			ammo_clip -= 1
 			get_parent().get_parent().update_weapon_state(ammo_reserve,ammo_clip)
 			
-			#Calcula desvio
-			var deviation_x = randf_range(-2,2)
-			var deviation_y = randf_range(-2,2)
-			rc.set_rotation_degrees(Vector3(deviation_x,deviation_y,0))
-			
-			#Verifica quem foi atingido e aplica dano
-			var target = rc.get_collider()
-			if target != null && target.is_in_group("Enemy"):
-				target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
-				#print(get_parent().player.multiplayer.is_multiplayer_authority())
-			
-			#Spawnar um efeito no local de impacto
-			rpc("spawn_bullet_impact",rc.get_collision_point())
-			
-			#Reseta o desvio do raycast
-			#rc.set_rotation_degrees(Vector3(0,0,0))
-		
-			#Timer de taxa de disparo
-			fire_timer.start(fire_rate)
-			can_fire = false
-		
+			var pellet_counter = 0
+			while pellet_counter < 10:
+				#Calcula desvio
+				var deviation_x = randf_range(-3,3)
+				var deviation_y = randf_range(-3,3)
+				rc.set_rotation_degrees(Vector3(deviation_x,deviation_y,0))
+				
+				#Verifica quem foi atingido e aplica dano
+				var target = rc.get_collider()
+				if target != null && target.is_in_group("Enemy"):
+					target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
+					#print(get_parent().player.multiplayer.is_multiplayer_authority())
+				
+				#Spawnar um efeito no local de impacto
+				rpc("spawn_bullet_impact",rc.get_collision_point())
+				
+				#Reseta o desvio do raycast
+				#rc.set_rotation_degrees(Vector3(0,0,0))
+				
+				#Timer de taxa de disparo
+				fire_timer.start(fire_rate)
+				can_fire = false
+				
+				pellet_counter += 1
+				print(rc.rotation_degrees)
 
 @rpc("any_peer","call_local")
 func spawn_bullet_impact(collision):
 	var bi = bullet_impact.instantiate()
-	Global.add_child(bi, true)
+	Global.Effects.add_child(bi, true)
 	bi.global_position = collision
-	#bi.look_at(rc.get_collision_point() + rc.get_collision_normal())
 
 func _on_fire_timer_timeout():
 	can_fire = true

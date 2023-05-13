@@ -17,3 +17,5 @@ spawn_limit = 1
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="Players"]
 _spawnable_scenes = PackedStringArray("res://PMove/QPlayer.tscn")
 spawn_path = NodePath("..")
+
+[node name="Effects" type="Node" parent="."]

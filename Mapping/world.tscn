@@ -151,6 +151,7 @@ text = "Machine Gun"
 
 [node name="Shotgun" type="Button" parent="Spawn_HUD/Primary_buttons"]
 layout_mode = 2
+toggle_mode = true
 button_group = ExtResource("6_bopvj")
 text = "Shotgun"
 

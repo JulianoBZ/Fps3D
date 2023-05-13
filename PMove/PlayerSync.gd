@@ -41,3 +41,10 @@ extends MultiplayerSynchronizer
 			primary_weapon = val
 		else:
 			get_parent().primary_weapon = val
+
+@export var current_weapon:int:
+	set(val):
+		if is_multiplayer_authority():
+			current_weapon = val
+		else:
+			get_parent().get_node("Head/Weapons").current_weapon = val

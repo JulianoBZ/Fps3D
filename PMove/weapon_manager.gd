@@ -1,11 +1,13 @@
 extends Node3D
 
-var current_weapon
+@export var current_weapon : int
+var sync 
 
 var pistol_a = preload("res://Weapons/Pistol_A.tscn").instantiate()
 var rifle_a = preload("res://Weapons/Rifle_A.tscn").instantiate()
 var melee = preload("res://Weapons/unarmed.tscn").instantiate()
 var machine_gun = preload("res://Weapons/machine_gun.tscn")
+var shotgun = preload("res://Weapons/shotgun.tscn")
 
 var primary_weapon
 var secondary_weapon
@@ -19,6 +21,7 @@ var has_loadout = false
 
 # Inicializa o loadout e inicia com a arma primária selecionada
 func _ready():
+	sync = get_parent().get_parent().get_node("Player_Sync")
 	#primary_weapon = get_parent().get_parent().primary_weapon
 	#print("Primary:",primary_weapon)
 	#match primary_weapon:
@@ -39,13 +42,16 @@ func set_loadout(wn1,wn2,wn3):
 
 # Pergunta se o player já tem loadout definido, se não, o jogador local vai definir seu proprio loadout localmente
 # já que quando é instanciado, ele funciona normalmente para os outros peers
-func _process(delta):
+func _process(_delta):
 	if has_loadout == false:
 		primary_weapon = get_parent().get_parent().primary_weapon
 		#print("Primary:",primary_weapon)
 		match primary_weapon:
 			"Machine Gun":
 				primary_node = machine_gun.instantiate()
+			"Shotgun":
+				primary_node = shotgun.instantiate()
+		
 		current_weapon = 1
 		set_loadout(primary_node,pistol_a,melee)
 		
@@ -56,14 +62,17 @@ func _process(delta):
 
 #Troca de arma baseada no Input, e define se está equipada no loop for
 func change_weapon():
-	if Input.is_action_just_pressed("Primary") || current_weapon == 1:
-		current_weapon = 1
-		
-	if Input.is_action_just_pressed("Secondary"):
-		current_weapon = 2
-		
-	if Input.is_action_just_pressed("Empty"):
-		current_weapon = 3
+	if get_parent().get_parent().sync.is_multiplayer_authority():
+		if Input.is_action_just_pressed("Primary") || current_weapon == 1:
+			current_weapon = 1
+			
+		if Input.is_action_just_pressed("Secondary"):
+			current_weapon = 2
+			
+		if Input.is_action_just_pressed("Empty"):
+			current_weapon = 3
+			
+		sync.current_weapon = current_weapon
 	
 	for each in self.get_children():
 		if each.type == current_weapon:

@@ -31,7 +31,7 @@ func _ready():
 	############################
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("m"):
 		for each in Global.Players.get_children():
 			if each.name == str(multiplayer.get_unique_id()):
