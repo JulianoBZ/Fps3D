@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxuaa1capvfar"]
+
+[ext_resource type="Script" path="res://BulletImpact.gd" id="1_0jgj2"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_8qdh5"]
+
+[node name="BulletImpact" type="Node3D"]
+script = ExtResource("1_0jgj2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+mesh = SubResource("SphereMesh_8qdh5")
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -18,6 +18,14 @@ var can_fire = true
 
 func _ready():
 	fire_timer.one_shot = true
+	initialize_weapon_manager()
+
+func initialize_weapon_manager():
+	get_parent().get_parent().weapon_name = weapon_name
+	get_parent().get_parent().ammo_reserve_max = ammo_reserve_max
+	get_parent().get_parent().ammo_reserve = ammo_reserve
+	get_parent().get_parent().ammo_clip_max = ammo_clip_max
+	get_parent().get_parent().ammo_clip = ammo_clip
 
 #Sempre calcula se shoot() está disponível baseado em can_fire e raycast inserido
 func _process(_delta):
@@ -28,14 +36,14 @@ func _process(_delta):
 
 func Fire(rc):
 	if Input.is_action_pressed("shoot") && get_parent().is_equipped == true:
-		if can_fire:
+		if can_fire && ammo_clip > 0:
 			#Tira 1 bala do pente
 			ammo_clip -= 1
 			get_parent().get_parent().update_weapon_state(ammo_reserve,ammo_clip)
 			var target = rc.get_collider()
 			if target != null && target.is_in_group("Enemy"):
-				target.health -= damage
-				print(target,weapon_name)
+				target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
+				#print(get_parent().player.multiplayer.is_multiplayer_authority())
 			fire_timer.start(fire_rate)
 			can_fire = false
 

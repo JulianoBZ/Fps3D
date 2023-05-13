@@ -1,13 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://bkmtqbu5o522"]
+[gd_scene load_steps=8 format=3 uid="uid://dvoi6aafonpom"]
 
-[ext_resource type="Script" path="res://Weapon_Node.gd" id="1_hp3p0"]
-[ext_resource type="Script" path="res://weapon_scripts/Pistol_A_Logic.gd" id="2_tfc1j"]
+[ext_resource type="Script" path="res://Weapon_Node.gd" id="1_lbrqk"]
+[ext_resource type="Script" path="res://Weapons/machine_gun_logic.gd" id="2_galu6"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_47n4t"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c2cwh"]
 albedo_color = Color(0.156863, 0.156863, 0.156863, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_wf17l"]
-material = SubResource("StandardMaterial3D_47n4t")
+[sub_resource type="BoxMesh" id="BoxMesh_l7tur"]
+material = SubResource("StandardMaterial3D_c2cwh")
 
 [sub_resource type="Animation" id="Animation_dauch"]
 length = 0.001
@@ -46,11 +46,11 @@ _data = {
 "reload": SubResource("Animation_suhsx")
 }
 
-[node name="Pistol_A" type="Node3D"]
-script = ExtResource("1_hp3p0")
+[node name="MachineGun" type="Node3D"]
+script = ExtResource("1_lbrqk")
 
 [node name="WeaponLogic" type="Node3D" parent="."]
-script = ExtResource("2_tfc1j")
+script = ExtResource("2_galu6")
 
 [node name="fire_timer" type="Timer" parent="WeaponLogic"]
 one_shot = true
@@ -65,12 +65,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 
 [node name="Upper" type="MeshInstance3D" parent="Root/Anchor/Body"]
 transform = Transform3D(0.02, 0, 0, 0, 0.03, 0, 0, 0, 0.15, 0, 0.041, -0.095)
-mesh = SubResource("BoxMesh_wf17l")
+mesh = SubResource("BoxMesh_l7tur")
 skeleton = NodePath("../../../..")
 
 [node name="Lower" type="MeshInstance3D" parent="Root/Anchor/Body"]
 transform = Transform3D(0.0197124, 0, 0, 0, 0.077959, 0.00443124, 0, -0.0118166, 0.0292346, 0, 0.00455573, -0.0302134)
-mesh = SubResource("BoxMesh_wf17l")
+mesh = SubResource("BoxMesh_l7tur")
 skeleton = NodePath("../../../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -79,4 +79,3 @@ libraries = {
 }
 
 [connection signal="timeout" from="WeaponLogic/fire_timer" to="WeaponLogic" method="_on_fire_timer_timeout"]
-[connection signal="animation_finished" from="AnimationPlayer" to="WeaponLogic" method="_on_animation_player_animation_finished"]

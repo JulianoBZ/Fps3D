@@ -3,12 +3,16 @@ extends Node3D
 @onready var player_body = preload("res://PMove/QPlayer.tscn")
 
 @export var class_group = ButtonGroup
+@export var primary_group = ButtonGroup
 
 var player_class_group
+var player_primary_group
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$Camera3D.make_current()
 	player_class_group = class_group
+	player_primary_group = primary_group
 	
 	Global.world_camera = $Camera3D
 	Global.world_spawn_hud = $Spawn_HUD
@@ -44,29 +48,31 @@ func _on_spawn_button_pressed():
 	
 	if multiplayer.is_server():
 		Global.desired_class = str(player_class_group.get_pressed_button().name)
-		print(Global.desired_class)
+		Global.desired_primary = str(player_primary_group.get_pressed_button().name)
+		#print(Global.desired_primary)
 		$Spawn_HUD.hide()
-		spawn_player(multiplayer.get_unique_id())
+		spawn_player(multiplayer.get_unique_id(),Global.desired_class, Global.desired_primary)
 	else:
 		Global.desired_class = str(player_class_group.get_pressed_button().name)
-		print(Global.desired_class)
+		Global.desired_primary = str(player_primary_group.get_pressed_button().name)
+		#print(Global.desired_class)
 		$Spawn_HUD.hide()
-		rpc_id(1,"spawn_from_server",multiplayer.get_unique_id())
+		rpc_id(1,"spawn_from_server",multiplayer.get_unique_id(),Global.desired_class, Global.desired_primary)
 
 @rpc("any_peer","call_remote")
-func spawn_from_server(id):
-	spawn_player(id)
+func spawn_from_server(id, body_class, primary_weapon):
+	spawn_player(id, body_class, primary_weapon)
 
-func spawn_player(id):
-	# Randomize character position.
+func spawn_player(id, body_class, primary_weapon):
 	var player_b = player_body.instantiate()
 	player_b.set_multiplayer_authority(id, true)
-	#for each in Global.Players.get_children():
-	#	if str(each.name) == str(id):
 	player_b.name = str(id)
+	player_b.player_class = body_class
+	player_b.primary_weapon = primary_weapon
 	Global.Players.add_child(player_b, true)
 	player_b.position = $Spawns.get_child(randi_range(0,3)).position
-	print(player_b.position)
+	#print("Player Primary:",player_b.primary_weapon)
+	#print("Entered Primary:",primary_weapon)
 
 ###################################################
 

@@ -34,3 +34,10 @@ extends MultiplayerSynchronizer
 			camera = val
 		else:
 			get_parent().camera = val
+
+@export var primary_weapon:String:
+	set(val):
+		if is_multiplayer_authority():
+			primary_weapon = val
+		else:
+			get_parent().primary_weapon = val

@@ -1,14 +1,12 @@
 extends Node3D
-class_name Weapon_Node
 
 #Player define o jogador que disparou e raycast serve para a lógica da arma
 var player
 var raycast_path
 var is_equipped = false
 
-
 func _ready():
-	set_raycast(get_parent().raycast)
+	pass # Replace with function body.
 
 #Até o momento o raycast serve para alimentar a lógica da arma
 func set_raycast(rc):

@@ -3,10 +3,14 @@ extends CharacterBody3D
 #Network
 @onready var sync = $Player_Sync
 @onready var camera = $Head/Camera3D
+@onready var weapon_manager_path = $Head/Weapons
 #var Network_ID
 
 #Stats
-var player_class = Global.desired_class
+@export var player_class : int
+@export var primary_weapon : String
+var secondary_weapon
+var melee_weapon
 var head
 var speedLabel
 var grounded = false
@@ -40,6 +44,9 @@ var playerTopVelocity : float = 0.0
 @export var mouseSens = .1
 
 func _ready():
+	print("QPlayer Primary: ",primary_weapon)
+	
+	
 	
 	sync.set_multiplayer_authority(str(name).to_int())
 	camera.current = sync.is_multiplayer_authority()
@@ -52,6 +59,9 @@ func _ready():
 		head = get_node(headPath) #Gets the head
 		speedLabel = get_node(speedReadout) #Gets the UI Element
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) #Sets the mouse to captured
+		
+		primary_weapon = Global.desired_primary
+		sync.primary_weapon = primary_weapon
 
 func _input(event):
 	if sync.is_multiplayer_authority():
@@ -92,6 +102,8 @@ func _physics_process(delta):
 		##################
 		sync.position = position
 		sync.rotation = rotation
+		
+		sync.primary_weapon = primary_weapon
 		
 		if Input.is_action_just_pressed("kys"):
 			health = 0

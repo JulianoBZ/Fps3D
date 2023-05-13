@@ -23,6 +23,7 @@ sky = SubResource("Sky_8l5qf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
 script = ExtResource("1_fka84")
 class_group = ExtResource("5_g7y1c")
+primary_group = ExtResource("6_bopvj")
 
 [node name="Object" parent="." instance=ExtResource("2_odvqu")]
 transform = Transform3D(207.091, 0, 0, 0, 0.709942, 0, 0, 0, 285.785, 0, 0, 0)
@@ -141,16 +142,17 @@ text = "Primary:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Rifle" type="Button" parent="Spawn_HUD/Primary_buttons"]
+[node name="Machine Gun" type="Button" parent="Spawn_HUD/Primary_buttons"]
 layout_mode = 2
 toggle_mode = true
+button_pressed = true
 button_group = ExtResource("6_bopvj")
-text = "Rifle"
+text = "Machine Gun"
 
-[node name="Light2" type="Button" parent="Spawn_HUD/Primary_buttons"]
-visible = false
+[node name="Shotgun" type="Button" parent="Spawn_HUD/Primary_buttons"]
 layout_mode = 2
-text = "Light"
+button_group = ExtResource("6_bopvj")
+text = "Shotgun"
 
 [node name="Light3" type="Button" parent="Spawn_HUD/Primary_buttons"]
 visible = false

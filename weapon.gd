@@ -17,17 +17,18 @@ var is_equipped = false
 func set_weapon(wn):
 	weapon_node = wn
 	var w = weapon_node
-	weapon_name = str(w.name)
-	w.set_raycast(raycast)
-	add_child(w)
-	ammo_reserve_max = w.get_node("WeaponLogic").ammo_reserve_max
-	ammo_reserve = w.get_node("WeaponLogic").ammo_reserve
-	ammo_clip_max = w.get_node("WeaponLogic").ammo_clip_max
-	ammo_clip = w.get_node("WeaponLogic").ammo_clip
+	#weapon_name = str(weapon_name)
+	#w.set_raycast(raycast)
+	if w != null:
+		add_child(w, true)
+	#ammo_reserve_max = w.get_node("WeaponLogic").ammo_reserve_max
+	#ammo_reserve = w.get_node("WeaponLogic").ammo_reserve
+	#ammo_clip_max = w.get_node("WeaponLogic").ammo_clip_max
+	#ammo_clip = w.get_node("WeaponLogic").ammo_clip
 	#eq_anim
 	#uneq_anim
-	weapon_name = w.get_node("WeaponLogic").weapon_name
-	w.player = get_parent().get_parent().get_parent()
+	#weapon_name = w.get_node("WeaponLogic").weapon_name
+	#w.player = get_parent().get_parent().get_parent()
 	
 func update_weapon_state(ar,ac):
 	ammo_reserve = ar
