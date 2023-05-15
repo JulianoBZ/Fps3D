@@ -55,6 +55,38 @@ script = ExtResource("2_f6qi3")
 [node name="fire_timer" type="Timer" parent="WeaponLogic"]
 one_shot = true
 
+[node name="Raycasts" type="Node3D" parent="WeaponLogic"]
+
+[node name="RayCast3D" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RayCast3D2" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RayCast3D3" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RayCast3D4" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RayCast3D5" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RayCast3D6" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RayCast3D7" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RayCast3D8" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RayCast3D9" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
+[node name="RayCast3D10" type="RayCast3D" parent="WeaponLogic/Raycasts"]
+target_position = Vector3(0, 0, -1000)
+
 [node name="Root" type="Node3D" parent="."]
 
 [node name="Anchor" type="Node3D" parent="Root"]

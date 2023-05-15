@@ -33,7 +33,7 @@ properties/5/path = NodePath(".:current_weapon")
 properties/5/spawn = true
 properties/5/sync = true
 
-[node name="Player" type="CharacterBody3D" groups=["Enemy"]]
+[node name="Player" type="CharacterBody3D" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00593483, 0)
 script = ExtResource("1_vsa8p")
 headPath = NodePath("Head")

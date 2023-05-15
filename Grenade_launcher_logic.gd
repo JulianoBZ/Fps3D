@@ -1,19 +1,22 @@
 extends Weapon_Node
 
-var fire_rate = 0.05
+var fire_rate = 0.85
+@onready var raycast = $RayCast3D
+@onready var barrel = get_parent().get_node("Root/Anchor/Body/Upper")
 @onready var fire_timer = $fire_timer
 @onready var animation_player = get_parent().get_node("AnimationPlayer")
 
-@onready var bullet_impact = preload("res://Weapons/bullet_impact.tscn")
+@onready var grenade = preload("res://Weapons/grenade.tscn")
 
-var weapon_name = "Machine Gun"
-var ammo_reserve_max = 200
-var ammo_reserve = 200
-var ammo_clip_max = 200
-var ammo_clip = 200
+var weapon_name = "Grenade Launcher"
+var ammo_reserve_max = 15
+var ammo_reserve = 15
+var ammo_clip_max = 15
+var ammo_clip = 15
 
 var damage = 3
 var can_fire = true
+var projectile_velocity = 30
 
 var rand = RandomNumberGenerator.new()
 
@@ -34,7 +37,7 @@ func _process(_delta):
 	if animation_player.is_playing && get_parent().is_equipped == false:
 		animation_player.stop()
 
-func Fire(rc):
+func Fire(_rc):
 	#Checagem se o jogador é a autoridade multiplayer, se está equipado, e se está pressionando botão de tiro
 	if Input.is_action_pressed("shoot") && get_parent().is_equipped == true && get_parent().get_parent().get_parent().get_parent().get_parent().sync.is_multiplayer_authority():
 		if can_fire && ammo_clip > 0:
@@ -42,33 +45,34 @@ func Fire(rc):
 			ammo_clip -= 1
 			get_parent().get_parent().update_weapon_state(ammo_reserve,ammo_clip)
 			
-			#Calcula desvio
-			var deviation_x = randf_range(-2,2)
-			var deviation_y = randf_range(-2,2)
-			rc.set_rotation_degrees(Vector3(deviation_x,deviation_y,0))
-			
 			#Verifica quem foi atingido e aplica dano
-			var target = rc.get_collider()
-			if target != null && target.is_in_group("Player"):
-				target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
+			#var target = rc.get_collider()
+			#if target != null && target.is_in_group("Enemy"):
+			#	target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
 				#print(get_parent().player.multiplayer.is_multiplayer_authority())
 			
 			#Spawnar um efeito no local de impacto
-			rpc("spawn_bullet_impact",rc.get_collision_point())
-			
-			#Reseta o desvio do raycast
-			#rc.set_rotation_degrees(Vector3(0,0,0))
-		
+			var projectile_direction = $Fire_position.get_global_transform().basis.z
+			var projectile_position = $Fire_position.global_position
+			if get_multiplayer_authority() == 1:
+				rpc("spawn_grenade",projectile_direction,$Fire_position.position,projectile_position)
+			else:
+				rpc_id(1,"spawn_grenade",projectile_direction,$Fire_position.position,projectile_position)
 			#Timer de taxa de disparo
 			fire_timer.start(fire_rate)
 			can_fire = false
+			
+			#print(get_parent().player)
 		
 
 @rpc("any_peer","call_local")
-func spawn_bullet_impact(collision):
-	var bi = bullet_impact.instantiate()
-	Global.add_child(bi, true)
-	bi.global_position = collision
+func spawn_grenade(proj_dir,f_position,global_pos):
+	var gr = grenade.instantiate()
+	Global.Effects.add_child(gr, true)
+	gr.global_position = global_pos
+	gr.apply_impulse((-proj_dir * projectile_velocity),f_position)
+	#gr.shooter = get_parent().player
+	gr.add_collision_exception_with(get_parent().player)
 	#bi.look_at(rc.get_collision_point() + rc.get_collision_normal())
 
 func _on_fire_timer_timeout():

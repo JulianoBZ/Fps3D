@@ -19,3 +19,7 @@ _spawnable_scenes = PackedStringArray("res://PMove/QPlayer.tscn")
 spawn_path = NodePath("..")
 
 [node name="Effects" type="Node" parent="."]
+
+[node name="EffectSpawner" type="MultiplayerSpawner" parent="Effects"]
+_spawnable_scenes = PackedStringArray("res://Weapons/grenade.tscn", "res://Weapons/explosion.tscn", "res://Weapons/bullet_impact.tscn")
+spawn_path = NodePath("..")

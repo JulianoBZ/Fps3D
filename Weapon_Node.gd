@@ -16,7 +16,7 @@ func set_raycast(rc):
 	raycast_path = rc
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	is_equipped = get_parent().is_equipped
 	pass
 

@@ -1,13 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://dvoi6aafonpom"]
+[gd_scene load_steps=8 format=3 uid="uid://chcnh8qhrnky3"]
 
-[ext_resource type="Script" path="res://Weapon_Node.gd" id="1_lbrqk"]
-[ext_resource type="Script" path="res://Weapons/machine_gun_logic.gd" id="2_galu6"]
+[ext_resource type="Script" path="res://Weapon_Node.gd" id="1_tv4m3"]
+[ext_resource type="Script" path="res://Grenade_launcher_logic.gd" id="2_m0ym7"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t5jc7"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sns48"]
 albedo_color = Color(0.156863, 0.156863, 0.156863, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_l7tur"]
-material = SubResource("StandardMaterial3D_t5jc7")
+[sub_resource type="BoxMesh" id="BoxMesh_y4qkg"]
+material = SubResource("StandardMaterial3D_sns48")
 
 [sub_resource type="Animation" id="Animation_dauch"]
 length = 0.001
@@ -46,14 +46,21 @@ _data = {
 "reload": SubResource("Animation_suhsx")
 }
 
-[node name="MachineGun" type="Node3D"]
-script = ExtResource("1_lbrqk")
+[node name="grenade_launcher" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, 0, 0)
+script = ExtResource("1_tv4m3")
 
 [node name="WeaponLogic" type="Node3D" parent="."]
-script = ExtResource("2_galu6")
+script = ExtResource("2_m0ym7")
 
 [node name="fire_timer" type="Timer" parent="WeaponLogic"]
 one_shot = true
+
+[node name="RayCast3D" type="RayCast3D" parent="WeaponLogic"]
+target_position = Vector3(0, 0, -1)
+
+[node name="Fire_position" type="Node3D" parent="WeaponLogic"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0394835, -0.563676)
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -65,12 +72,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 
 [node name="Upper" type="MeshInstance3D" parent="Root/Anchor/Body"]
 transform = Transform3D(0.02, 0, 0, 0, 0.03, 0, 0, 0, 0.15, 0, 0.041, -0.095)
-mesh = SubResource("BoxMesh_l7tur")
+mesh = SubResource("BoxMesh_y4qkg")
 skeleton = NodePath("../../../..")
 
 [node name="Lower" type="MeshInstance3D" parent="Root/Anchor/Body"]
 transform = Transform3D(0.0197124, 0, 0, 0, 0.077959, 0.00443124, 0, -0.0118166, 0.0292346, 0, 0.00455573, -0.0302134)
-mesh = SubResource("BoxMesh_l7tur")
+mesh = SubResource("BoxMesh_y4qkg")
 skeleton = NodePath("../../../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

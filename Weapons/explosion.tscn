@@ -1,0 +1,151 @@
+[gd_scene load_steps=22 format=3 uid="uid://ddyy8mbe8dhl"]
+
+[ext_resource type="Texture2D" uid="uid://btkvau837eka0" path="res://shitty_explosion.png" id="1_6dd1m"]
+[ext_resource type="Script" path="res://Weapons/explosion.gd" id="1_6y3tw"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mwwfv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pgmeq"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(600, 282, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qc8pl"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(800, 282, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a1dki"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(0, 564, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cwxnw"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(200, 564, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1c4im"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(400, 564, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qw44o"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(600, 564, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e02uq"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(800, 564, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i15bj"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(0, 846, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8eth"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(200, 846, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stvia"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(0, 0, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hgoov"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(200, 0, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pv2pq"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(400, 0, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ibxu8"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(600, 0, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nw7ev"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(800, 0, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy80v"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(0, 282, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5qjex"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(200, 282, 200, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lcnr"]
+atlas = ExtResource("1_6dd1m")
+region = Rect2(400, 282, 200, 282)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jhhhi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pgmeq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qc8pl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a1dki")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cwxnw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1c4im")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qw44o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e02uq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i15bj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p8eth")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stvia")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hgoov")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pv2pq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ibxu8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nw7ev")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy80v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5qjex")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0lcnr")
+}],
+"loop": false,
+"name": &"explosion",
+"speed": 30.0
+}]
+
+[node name="explosion" type="Area3D"]
+script = ExtResource("1_6y3tw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("SphereShape3D_mwwfv")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.702492, 0, 0, 0, 1, 0, 0.0538388, 0)
+billboard = 1
+sprite_frames = SubResource("SpriteFrames_jhhhi")
+animation = &"explosion"
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+hit_from_inside = true
+
+[connection signal="animation_finished" from="AnimatedSprite3D" to="." method="_on_animated_sprite_3d_animation_finished"]

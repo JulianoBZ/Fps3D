@@ -1,5 +1,6 @@
 extends Weapon_Node
 
+
 var fire_rate = 0.8
 @onready var fire_timer = $fire_timer
 @onready var animation_player = get_parent().get_node("AnimationPlayer")
@@ -18,6 +19,10 @@ var can_fire = true
 var rand = RandomNumberGenerator.new()
 
 func _ready():
+	for each in $Raycasts.get_children():
+		var deviation_x = randf_range(-3,3)
+		var deviation_y = randf_range(-3,3)
+		each.set_rotation_degrees(Vector3(deviation_x,deviation_y,0))
 	fire_timer.one_shot = true
 	initialize_weapon_manager()
 
@@ -42,21 +47,23 @@ func Fire(rc):
 			ammo_clip -= 1
 			get_parent().get_parent().update_weapon_state(ammo_reserve,ammo_clip)
 			
-			var pellet_counter = 0
-			while pellet_counter < 10:
+			for each in $Raycasts.get_children():
+				
+				each.global_position = rc.global_position
+				
 				#Calcula desvio
 				var deviation_x = randf_range(-3,3)
 				var deviation_y = randf_range(-3,3)
-				rc.set_rotation_degrees(Vector3(deviation_x,deviation_y,0))
+				each.set_rotation_degrees(Vector3(deviation_x,deviation_y,0))
 				
 				#Verifica quem foi atingido e aplica dano
-				var target = rc.get_collider()
-				if target != null && target.is_in_group("Enemy"):
+				var target = each.get_collider()
+				if target != null && target.is_in_group("Player"):
 					target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
 					#print(get_parent().player.multiplayer.is_multiplayer_authority())
 				
 				#Spawnar um efeito no local de impacto
-				rpc("spawn_bullet_impact",rc.get_collision_point())
+				rpc("spawn_bullet_impact",each.get_collision_point())
 				
 				#Reseta o desvio do raycast
 				#rc.set_rotation_degrees(Vector3(0,0,0))
@@ -65,8 +72,7 @@ func Fire(rc):
 				fire_timer.start(fire_rate)
 				can_fire = false
 				
-				pellet_counter += 1
-				print(rc.rotation_degrees)
+				print(each.rotation_degrees)
 
 @rpc("any_peer","call_local")
 func spawn_bullet_impact(collision):

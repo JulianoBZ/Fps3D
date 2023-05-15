@@ -155,10 +155,11 @@ toggle_mode = true
 button_group = ExtResource("6_bopvj")
 text = "Shotgun"
 
-[node name="Light3" type="Button" parent="Spawn_HUD/Primary_buttons"]
-visible = false
+[node name="Grenade Launcher" type="Button" parent="Spawn_HUD/Primary_buttons"]
 layout_mode = 2
-text = "Light"
+toggle_mode = true
+button_group = ExtResource("6_bopvj")
+text = "Grenade Launcher"
 
 [node name="Secondary_buttons" type="VBoxContainer" parent="Spawn_HUD"]
 layout_mode = 0

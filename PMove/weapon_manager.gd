@@ -8,6 +8,7 @@ var rifle_a = preload("res://Weapons/Rifle_A.tscn").instantiate()
 var melee = preload("res://Weapons/unarmed.tscn").instantiate()
 var machine_gun = preload("res://Weapons/machine_gun.tscn")
 var shotgun = preload("res://Weapons/shotgun.tscn")
+var grenade_launcher = preload("res://Weapons/grenade_launcher.tscn")
 
 var primary_weapon
 var secondary_weapon
@@ -51,6 +52,8 @@ func _process(_delta):
 				primary_node = machine_gun.instantiate()
 			"Shotgun":
 				primary_node = shotgun.instantiate()
+			"Grenade Launcher":
+				primary_node = grenade_launcher.instantiate()
 		
 		current_weapon = 1
 		set_loadout(primary_node,pistol_a,melee)
