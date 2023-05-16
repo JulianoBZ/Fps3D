@@ -15,7 +15,7 @@ var head
 var speedLabel
 var grounded = false
 var wishJump = false
-@export var health = 100
+@export var health = 1000
 @onready var Cmd = $Cmd
 
 # Movement Varabiles

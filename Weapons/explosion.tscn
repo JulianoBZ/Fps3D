@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://ddyy8mbe8dhl"]
+[gd_scene load_steps=23 format=3 uid="uid://ddyy8mbe8dhl"]
 
 [ext_resource type="Texture2D" uid="uid://btkvau837eka0" path="res://shitty_explosion.png" id="1_6dd1m"]
 [ext_resource type="Script" path="res://Weapons/explosion.gd" id="1_6y3tw"]
@@ -132,7 +132,19 @@ animations = [{
 "speed": 30.0
 }]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mh32k"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:process_mode")
+properties/1/spawn = true
+properties/1/sync = true
+properties/2/path = NodePath(".:monitoring")
+properties/2/spawn = true
+properties/2/sync = true
+
 [node name="explosion" type="Area3D"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
 script = ExtResource("1_6y3tw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -148,4 +160,8 @@ animation = &"explosion"
 [node name="RayCast3D" type="RayCast3D" parent="."]
 hit_from_inside = true
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_mh32k")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="animation_finished" from="AnimatedSprite3D" to="." method="_on_animated_sprite_3d_animation_finished"]

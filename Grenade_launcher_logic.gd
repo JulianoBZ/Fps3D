@@ -54,25 +54,28 @@ func Fire(_rc):
 			#Spawnar um efeito no local de impacto
 			var projectile_direction = $Fire_position.get_global_transform().basis.z
 			var projectile_position = $Fire_position.global_position
-			if get_multiplayer_authority() == 1:
-				rpc("spawn_grenade",projectile_direction,$Fire_position.position,projectile_position)
+			if get_parent().player.sync.get_multiplayer_authority() == 1:
+				spawn_grenade(projectile_direction,$Fire_position.position,projectile_position,get_parent().player.name)
 			else:
-				rpc_id(1,"spawn_grenade",projectile_direction,$Fire_position.position,projectile_position)
+				rpc_id(1,"grenade_from_server",projectile_direction,$Fire_position.position,projectile_position,get_parent().player.name)
 			#Timer de taxa de disparo
 			fire_timer.start(fire_rate)
 			can_fire = false
 			
 			#print(get_parent().player)
-		
 
 @rpc("any_peer","call_local")
-func spawn_grenade(proj_dir,f_position,global_pos):
+func grenade_from_server(proj_dir,f_position,global_pos,shooter):
+	spawn_grenade(proj_dir,f_position,global_pos,shooter)
+
+#@rpc("any_peer","call_local")
+func spawn_grenade(proj_dir,f_position,global_pos,shooter):
 	var gr = grenade.instantiate()
 	Global.Effects.add_child(gr, true)
 	gr.global_position = global_pos
 	gr.apply_impulse((-proj_dir * projectile_velocity),f_position)
-	#gr.shooter = get_parent().player
-	gr.add_collision_exception_with(get_parent().player)
+	gr.shooter = shooter
+	#gr.add_collision_exception_with(get_parent().player)
 	#bi.look_at(rc.get_collision_point() + rc.get_collision_normal())
 
 func _on_fire_timer_timeout():

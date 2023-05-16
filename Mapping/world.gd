@@ -59,7 +59,7 @@ func _on_spawn_button_pressed():
 		$Spawn_HUD.hide()
 		rpc_id(1,"spawn_from_server",multiplayer.get_unique_id(),Global.desired_class, Global.desired_primary)
 
-@rpc("any_peer","call_remote")
+@rpc("any_peer","call_local")
 func spawn_from_server(id, body_class, primary_weapon):
 	spawn_player(id, body_class, primary_weapon)
 
