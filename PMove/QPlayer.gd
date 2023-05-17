@@ -72,7 +72,6 @@ func _input(event):
 			head.rotation.x = clamp(head.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 
 func _physics_process(delta):
-	
 	#sync.health = health
 	
 	if sync.is_multiplayer_authority():
@@ -104,6 +103,8 @@ func _physics_process(delta):
 		sync.rotation = rotation
 		
 		sync.primary_weapon = primary_weapon
+		
+		$Label3D.text = str(sync.get_multiplayer_authority())+"/"+str(sync.health)
 		
 		if Input.is_action_just_pressed("kys"):
 			health = 0
@@ -250,4 +251,3 @@ func accelerate(wishdir : Vector3, wishspeed : float, accel : float):
 		playerVelocity.x += accelspeed * wishdir.x
 		playerVelocity.z += accelspeed * wishdir.z
 	
-

@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://7kuuidqb023e"]
+[gd_scene load_steps=3 format=3 uid="uid://7kuuidqb023e"]
 
 [ext_resource type="Script" path="res://Global.gd" id="1_l8mxt"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oxedj"]
+properties/0/path = NodePath(".")
+properties/0/spawn = true
+properties/0/sync = true
 
 [node name="Global" type="Node"]
 script = ExtResource("1_l8mxt")
@@ -23,3 +28,6 @@ spawn_path = NodePath("..")
 [node name="EffectSpawner" type="MultiplayerSpawner" parent="Effects"]
 _spawnable_scenes = PackedStringArray("res://Weapons/grenade.tscn", "res://Weapons/explosion.tscn", "res://Weapons/bullet_impact.tscn")
 spawn_path = NodePath("..")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Effects"]
+replication_config = SubResource("SceneReplicationConfig_oxedj")

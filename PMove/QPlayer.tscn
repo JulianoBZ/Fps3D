@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://k5l6wcim5r2h"]
+[gd_scene load_steps=10 format=3 uid="uid://k5l6wcim5r2h"]
 
 [ext_resource type="Script" path="res://PMove/QPlayer.gd" id="1_vsa8p"]
 [ext_resource type="Script" path="res://PMove/weapon_manager.gd" id="2_42aew"]
@@ -10,8 +10,6 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_s8q0e"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ylt4f"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ds6n7"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aoivw"]
 properties/0/path = NodePath(".:position")
@@ -32,6 +30,9 @@ properties/4/sync = true
 properties/5/path = NodePath(".:current_weapon")
 properties/5/spawn = true
 properties/5/sync = true
+properties/6/path = NodePath("../Label3D:text")
+properties/6/spawn = true
+properties/6/sync = true
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00593483, 0)
@@ -91,11 +92,6 @@ shape = SubResource("CapsuleShape3D_s8q0e")
 [node name="Mesh" type="MeshInstance3D" parent="Body"]
 mesh = SubResource("CapsuleMesh_ylt4f")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-visible = false
-shape = SubResource("CapsuleShape3D_ds6n7")
-disabled = true
-
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -123,6 +119,10 @@ offset_bottom = 78.0
 [node name="Cmd" type="Node3D" parent="."]
 visible = false
 script = ExtResource("2_kxnac")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10796, 0)
+billboard = 1
 
 [node name="Player_Sync" type="MultiplayerSynchronizer" parent="."]
 root_path = NodePath(".")
