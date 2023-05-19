@@ -1,12 +1,20 @@
-[gd_scene load_steps=11 format=3 uid="uid://cl1ok5lbvpp8k"]
+[gd_scene load_steps=14 format=3 uid="uid://cl1ok5lbvpp8k"]
 
 [ext_resource type="Script" path="res://Mapping/world.gd" id="1_fka84"]
 [ext_resource type="PackedScene" uid="uid://dtrjqfx1lapx0" path="res://Mapping/object.tscn" id="2_odvqu"]
 [ext_resource type="Texture2D" uid="uid://cauu0bn1gpvb3" path="res://Mapping/evening_road_01_puresky_4k.exr" id="3_uarhp"]
+[ext_resource type="Texture2D" uid="uid://dievtp1ppmd6v" path="res://placeholder.jpg" id="4_2ytvo"]
 [ext_resource type="ButtonGroup" uid="uid://chr2ly24e0h1a" path="res://groups/class_spawn_select.tres" id="5_g7y1c"]
 [ext_resource type="PackedScene" uid="uid://duks15jdepbp5" path="res://placeholder_enemy.tscn" id="5_rfeqr"]
 [ext_resource type="ButtonGroup" uid="uid://bhasbt5ahdrnc" path="res://groups/primary_spawn_select.tres" id="6_bopvj"]
 [ext_resource type="ButtonGroup" uid="uid://dsr7hqgjymvl" path="res://groups/secondary_spawn_select.tres" id="7_y6pq6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_73kfx"]
+albedo_texture = ExtResource("4_2ytvo")
+uv1_scale = Vector3(3, 2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jmrmb"]
+material = SubResource("StandardMaterial3D_73kfx")
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_t0br6"]
 panorama = ExtResource("3_uarhp")
@@ -24,15 +32,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
 script = ExtResource("1_fka84")
 class_group = ExtResource("5_g7y1c")
 primary_group = ExtResource("6_bopvj")
+secondary_group = ExtResource("7_y6pq6")
+
+[node name="Floor" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(205.364, 0, 0, 0, 1, 0, 0, 0, 282.316, 0, 0, 0)
+mesh = SubResource("BoxMesh_jmrmb")
 
 [node name="Object" parent="." instance=ExtResource("2_odvqu")]
 transform = Transform3D(207.091, 0, 0, 0, 0.709942, 0, 0, 0, 285.785, 0, 0, 0)
+visible = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f3nkb")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15419, 13.0524, -56.1304)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 102.422, 44.3234, 152.819)
+sky_mode = 1
 
 [node name="Object7" parent="." instance=ExtResource("2_odvqu")]
 transform = Transform3D(3.16281, 0, 0, 0, 1, 0, 0, 0, 6.61301, 0, 9.48025, -11.8285)
@@ -142,18 +159,13 @@ text = "Primary:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Machine Gun" type="Button" parent="Spawn_HUD/Primary_buttons"]
+[node name="Rail Gun" type="Button" parent="Spawn_HUD/Primary_buttons"]
 layout_mode = 2
 toggle_mode = true
 button_pressed = true
 button_group = ExtResource("6_bopvj")
-text = "Machine Gun"
-
-[node name="Shotgun" type="Button" parent="Spawn_HUD/Primary_buttons"]
-layout_mode = 2
-toggle_mode = true
-button_group = ExtResource("6_bopvj")
-text = "Shotgun"
+text = "Rail Gun
+"
 
 [node name="Grenade Launcher" type="Button" parent="Spawn_HUD/Primary_buttons"]
 layout_mode = 2
@@ -176,21 +188,19 @@ text = "Secondary:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Pistol" type="Button" parent="Spawn_HUD/Secondary_buttons"]
+[node name="Machine Gun" type="Button" parent="Spawn_HUD/Secondary_buttons"]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("7_y6pq6")
+text = "Machine Gun"
+
+[node name="Shotgun" type="Button" parent="Spawn_HUD/Secondary_buttons"]
 layout_mode = 2
 toggle_mode = true
 button_group = ExtResource("7_y6pq6")
-text = "Pistol"
-
-[node name="Light2" type="Button" parent="Spawn_HUD/Secondary_buttons"]
-visible = false
-layout_mode = 2
-text = "Light"
-
-[node name="Light3" type="Button" parent="Spawn_HUD/Secondary_buttons"]
-visible = false
-layout_mode = 2
-text = "Light"
+text = "Shotgun
+"
 
 [node name="Network" type="Node" parent="."]
 

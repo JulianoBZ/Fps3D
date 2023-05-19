@@ -42,6 +42,13 @@ extends MultiplayerSynchronizer
 		else:
 			get_parent().primary_weapon = val
 
+@export var secondary_weapon:String:
+	set(val):
+		if is_multiplayer_authority():
+			secondary_weapon = val
+		else:
+			get_parent().secondary_weapon = val
+
 @export var current_weapon:int:
 	set(val):
 		if is_multiplayer_authority():

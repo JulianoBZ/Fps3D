@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bt3gjmwec4h80"]
+
+[ext_resource type="Script" path="res://Coil_script.gd" id="1_omq40"]
+
+[node name="Coil" type="Timer"]
+wait_time = 2.0
+one_shot = true
+autostart = true
+script = ExtResource("1_omq40")
+
+[connection signal="timeout" from="." to="." method="_on_timeout"]

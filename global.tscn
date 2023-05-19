@@ -3,9 +3,6 @@
 [ext_resource type="Script" path="res://Global.gd" id="1_l8mxt"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oxedj"]
-properties/0/path = NodePath(".")
-properties/0/spawn = true
-properties/0/sync = true
 
 [node name="Global" type="Node"]
 script = ExtResource("1_l8mxt")

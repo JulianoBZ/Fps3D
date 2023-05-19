@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://chcnh8qhrnky3"]
+[gd_scene load_steps=8 format=3 uid="uid://chhjq6ttyb524"]
 
 [ext_resource type="Script" path="res://Weapon_Node.gd" id="1_tv4m3"]
 [ext_resource type="Script" path="res://Grenade_launcher_logic.gd" id="2_m0ym7"]

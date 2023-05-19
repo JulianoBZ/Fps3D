@@ -1,13 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://dbvltoi4xmwvv"]
+[gd_scene load_steps=8 format=3 uid="uid://8yt4shf23051"]
 
-[ext_resource type="Script" path="res://Weapon_Node.gd" id="1_lbrqk"]
-[ext_resource type="Script" path="res://machine_gun_logic.gd" id="2_srmum"]
+[ext_resource type="Script" path="res://Weapon_Node.gd" id="1_65d0v"]
+[ext_resource type="Script" path="res://rail_gun_logic.gd" id="1_s051c"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g3nqr"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t5jc7"]
 albedo_color = Color(0.156863, 0.156863, 0.156863, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_l7tur"]
-material = SubResource("StandardMaterial3D_g3nqr")
+[sub_resource type="BoxMesh" id="BoxMesh_6ldmc"]
+material = SubResource("StandardMaterial3D_t5jc7")
 
 [sub_resource type="Animation" id="Animation_dauch"]
 length = 0.001
@@ -46,11 +46,11 @@ _data = {
 "reload": SubResource("Animation_suhsx")
 }
 
-[node name="MachineGun" type="Node3D"]
-script = ExtResource("1_lbrqk")
+[node name="RailGun" type="Node3D"]
+script = ExtResource("1_65d0v")
 
 [node name="WeaponLogic" type="Node3D" parent="."]
-script = ExtResource("2_srmum")
+script = ExtResource("1_s051c")
 
 [node name="fire_timer" type="Timer" parent="WeaponLogic"]
 one_shot = true
@@ -65,12 +65,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 
 [node name="Upper" type="MeshInstance3D" parent="Root/Anchor/Body"]
 transform = Transform3D(0.02, 0, 0, 0, 0.03, 0, 0, 0, 0.15, 0, 0.041, -0.095)
-mesh = SubResource("BoxMesh_l7tur")
+mesh = SubResource("BoxMesh_6ldmc")
 skeleton = NodePath("../../../..")
 
 [node name="Lower" type="MeshInstance3D" parent="Root/Anchor/Body"]
 transform = Transform3D(0.0197124, 0, 0, 0, 0.077959, 0.00443124, 0, -0.0118166, 0.0292346, 0, 0.00455573, -0.0302134)
-mesh = SubResource("BoxMesh_l7tur")
+mesh = SubResource("BoxMesh_6ldmc")
 skeleton = NodePath("../../../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -9,7 +9,7 @@ extends CharacterBody3D
 #Stats
 @export var player_class : int
 @export var primary_weapon : String
-var secondary_weapon
+@export var secondary_weapon : String
 var melee_weapon
 var head
 var speedLabel
@@ -25,9 +25,9 @@ var deltaTime : float
 @export var moveSpeed              : float = 10   # Ground move speed
 @export var runAcceleration        : float = 20    # Ground accel
 @export var runDeacceleration      : float = 10    # Deacceleration that occurs when running on the ground
-@export var airAcceleration        : float = 2.0   # Air accel
+@export var airAcceleration        : float = 1.0   # Air accel
 @export var airDeacceleration      : float = 10.0   # Deacceleration experienced when opposite strafing
-@export var airControl             : float = 0.3   # How precise air control is
+@export var airControl             : float = 0.1   # How precise air control is
 @export var jumpSpeed              : float = 8.0   # The speed at which the characters up axis gains when hitting jump
 @export var holdJumpToBhop         : bool = true  # When enabled allows player to just hold jump button to keep on bhopping perfectly
 var playerFriction         : float = 0.0
@@ -44,14 +44,14 @@ var playerTopVelocity : float = 0.0
 @export var mouseSens = .1
 
 func _ready():
-	print("QPlayer Primary: ",primary_weapon)
+	#print("QPlayer Primary: ",primary_weapon)
 	
 	
 	
 	sync.set_multiplayer_authority(str(name).to_int())
 	camera.current = sync.is_multiplayer_authority()
 	
-	print("Player Scene Authority: ",sync.get_multiplayer_authority())
+	#print("Player Scene Authority: ",sync.get_multiplayer_authority())
 	############################################
 	if sync.is_multiplayer_authority():
 		$Head/HUD.show()
@@ -97,6 +97,7 @@ func _physics_process(delta):
 		
 		#Show the players current speed
 		speedLabel.text = str(playerVelocity.length())
+		speedLabel.text += "\n "+str(" X: ",rotation_degrees.y," - "," Y: ",$Head.rotation_degrees.x)
 		
 		##################
 		sync.position = position
@@ -114,6 +115,28 @@ func _physics_process(delta):
 @rpc("any_peer")
 func take_damage(dmg):
 	health -= dmg
+
+#get_parent().player.take_knockback(Vector3(get_parent().raycast_path.global_rotation.y/PI,
+#									-get_parent().raycast_path.global_rotation.x/PI,0),20,10)
+
+@rpc("any_peer")
+func take_knockback(wishdir,wishspeed,accel):
+	if wishdir.x >= 0:
+		wishdir.x -= 180
+	else:
+		wishdir.x += 180
+	
+	if wishdir.y >= 0:
+		wishdir.y -= 90
+	else:
+		wishdir.y += 90
+	
+	print(" Quaternion: ",get_quaternion())
+	wishdir.x /= 180
+	wishdir.y /= 90
+	print("knockback dir: ",wishdir)
+	
+	accelerate(wishdir, wishspeed, accel)
 
 func death():
 	if health <= 0:
@@ -177,7 +200,7 @@ func GroundMove():
 		var wishvel : Vector3
 		
 		if !wishJump:
-			ApplyFriction(1.0)
+			ApplyFriction(2.0)
 		else:
 			ApplyFriction(0)
 		
@@ -249,5 +272,7 @@ func accelerate(wishdir : Vector3, wishspeed : float, accel : float):
 			accelspeed = addspeed
 		
 		playerVelocity.x += accelspeed * wishdir.x
+		playerVelocity.y += accelspeed * wishdir.y
 		playerVelocity.z += accelspeed * wishdir.z
 	
+

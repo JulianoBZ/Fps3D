@@ -4,15 +4,18 @@ extends Node3D
 
 @export var class_group = ButtonGroup
 @export var primary_group = ButtonGroup
+@export var secondary_group = ButtonGroup
 
 var player_class_group
 var player_primary_group
+var player_secondary_group
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$Camera3D.make_current()
 	player_class_group = class_group
 	player_primary_group = primary_group
+	player_secondary_group = secondary_group
 	
 	Global.world_camera = $Camera3D
 	Global.world_spawn_hud = $Spawn_HUD
@@ -49,26 +52,29 @@ func _on_spawn_button_pressed():
 	if multiplayer.is_server():
 		Global.desired_class = str(player_class_group.get_pressed_button().name)
 		Global.desired_primary = str(player_primary_group.get_pressed_button().name)
+		Global.desired_secondary = str(player_secondary_group.get_pressed_button().name)
 		#print(Global.desired_primary)
 		$Spawn_HUD.hide()
-		spawn_player(multiplayer.get_unique_id(),Global.desired_class, Global.desired_primary)
+		spawn_player(multiplayer.get_unique_id(),Global.desired_class, Global.desired_primary,Global.desired_secondary)
 	else:
 		Global.desired_class = str(player_class_group.get_pressed_button().name)
 		Global.desired_primary = str(player_primary_group.get_pressed_button().name)
+		Global.desired_secondary = str(player_secondary_group.get_pressed_button().name)
 		#print(Global.desired_class)
 		$Spawn_HUD.hide()
-		rpc_id(1,"spawn_from_server",multiplayer.get_unique_id(),Global.desired_class, Global.desired_primary)
+		rpc_id(1,"spawn_from_server",multiplayer.get_unique_id(),Global.desired_class, Global.desired_primary,Global.desired_secondary)
 
 @rpc("any_peer","call_local")
-func spawn_from_server(id, body_class, primary_weapon):
-	spawn_player(id, body_class, primary_weapon)
+func spawn_from_server(id, body_class, primary_weapon,secondary_weapon):
+	spawn_player(id, body_class, primary_weapon,secondary_weapon)
 
-func spawn_player(id, body_class, primary_weapon):
+func spawn_player(id, body_class, primary_weapon,secondary_weapon):
 	var player_b = player_body.instantiate()
 	player_b.set_multiplayer_authority(id, true)
 	player_b.name = str(id)
 	player_b.player_class = body_class
 	player_b.primary_weapon = primary_weapon
+	player_b.secondary_weapon = secondary_weapon
 	Global.Players.add_child(player_b, true)
 	player_b.position = $Spawns.get_child(randi_range(0,3)).position
 	#print("Player Primary:",player_b.primary_weapon)

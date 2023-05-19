@@ -35,44 +35,48 @@ func initialize_weapon_manager():
 
 #Sempre calcula se shoot() está disponível baseado em can_fire e raycast inserido
 func _process(_delta):
-	Fire(get_parent().raycast_path)
+	if Input.is_action_pressed("shoot") && get_parent().is_equipped == true && get_parent().get_parent().get_parent().get_parent().get_parent().sync.is_multiplayer_authority():
+		Fire(get_parent().raycast_path,1)
+		fire_timer.start(fire_rate*1)
+		can_fire = false
+	if Input.is_action_pressed("shoot2") && get_parent().is_equipped == true && get_parent().get_parent().get_parent().get_parent().get_parent().sync.is_multiplayer_authority():
+		Fire(get_parent().raycast_path,2)
+		get_parent().player.take_knockback(Vector3(get_parent().player.rotation_degrees.y,get_parent().player.get_node("Head").rotation_degrees.x,0),30,30)
+		#print(get_parent().player.get_node("Head").rotation_degrees.x," - ", get_parent().player.rotation_degrees.y)
+		fire_timer.start(fire_rate*2)
+		can_fire = false
+		#Referencia
+		#body.take_knockback(Vector3(-$RayCast3D.global_rotation.y/PI,$RayCast3D.global_rotation.x/PI,0), damage*1.5, damage*2)
 	if animation_player.is_playing && get_parent().is_equipped == false:
 		animation_player.stop()
 
-func Fire(rc):
+func Fire(rc,type):
 	#Checagem se o jogador é a autoridade multiplayer, se está equipado, e se está pressionando botão de tiro
-	if Input.is_action_pressed("shoot") && get_parent().is_equipped == true && get_parent().get_parent().get_parent().get_parent().get_parent().sync.is_multiplayer_authority():
-		if can_fire && ammo_clip > 0:
+		if can_fire && ammo_clip > type && can_fire:
 			#Tira 1 bala do pente
-			ammo_clip -= 1
+			ammo_clip -= type
 			get_parent().get_parent().update_weapon_state(ammo_reserve,ammo_clip)
 			
-			for each in $Raycasts.get_children():
-				
-				each.global_position = rc.global_position
-				
-				#Calcula desvio
-				var deviation_x = randf_range(-3,3)
-				var deviation_y = randf_range(-3,3)
-				each.set_rotation_degrees(Vector3(deviation_x,deviation_y,0))
-				
-				#Verifica quem foi atingido e aplica dano
-				var target = each.get_collider()
-				if target != null && target.is_in_group("Player"):
-					target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
-					#print(get_parent().player.multiplayer.is_multiplayer_authority())
-				
-				#Spawnar um efeito no local de impacto
-				rpc("spawn_bullet_impact",each.get_collision_point())
-				
-				#Reseta o desvio do raycast
-				#rc.set_rotation_degrees(Vector3(0,0,0))
-				
-				#Timer de taxa de disparo
-				fire_timer.start(fire_rate)
-				can_fire = false
-				
-				print(each.rotation_degrees)
+			#Desvio das pellets de acordo com o tipo de tiro
+			var dev = 3 * type
+			
+			for x in range(type):
+				for each in $Raycasts.get_children():
+					each.global_position = rc.global_position
+					
+					#Calcula desvio
+					var deviation_x = randf_range(-dev,dev)
+					var deviation_y = randf_range(-dev,dev)
+					each.set_rotation_degrees(Vector3(deviation_x,deviation_y,0))
+					
+					#Verifica quem foi atingido e aplica dano
+					var target = each.get_collider()
+					if target != null && target.is_in_group("Player"):
+						target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
+						#print(get_parent().player.multiplayer.is_multiplayer_authority())
+					
+					#Spawnar um efeito no local de impacto
+					rpc("spawn_bullet_impact",each.get_collision_point())
 
 @rpc("any_peer","call_local")
 func spawn_bullet_impact(collision):

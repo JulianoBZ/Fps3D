@@ -1,9 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://6dlm4o4pha4b"]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://PMove/QPlayer.gd" id="1_vsa8p"]
 [ext_resource type="Script" path="res://PMove/weapon_manager.gd" id="2_42aew"]
 [ext_resource type="Script" path="res://PMove/cmd.gd" id="2_kxnac"]
-[ext_resource type="Script" path="res://weapon.gd" id="3_lfkkt"]
+[ext_resource type="Script" path="res://weapon.gd" id="3_bcva7"]
 [ext_resource type="PackedScene" uid="uid://chmgiae1nj11t" path="res://Weapons/hud.tscn" id="5_s0b5w"]
 [ext_resource type="Script" path="res://PMove/PlayerSync.gd" id="6_1nfw2"]
 
@@ -33,9 +33,6 @@ properties/5/sync = true
 properties/6/path = NodePath("../Label3D:text")
 properties/6/spawn = true
 properties/6/sync = true
-properties/7/path = NodePath(".:secondary_weapon")
-properties/7/spawn = true
-properties/7/sync = true
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00593483, 0)
@@ -57,7 +54,7 @@ script = ExtResource("2_42aew")
 
 [node name="Primary" type="Node3D" parent="Head/Weapons" node_paths=PackedStringArray("raycast")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.2, -0.4)
-script = ExtResource("3_lfkkt")
+script = ExtResource("3_bcva7")
 type = 1
 raycast = NodePath("../../Camera3D/RayCast3D")
 
@@ -68,7 +65,7 @@ spawn_limit = 1
 
 [node name="Secondary" type="Node3D" parent="Head/Weapons" node_paths=PackedStringArray("raycast")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.206, 0, -0.597)
-script = ExtResource("3_lfkkt")
+script = ExtResource("3_bcva7")
 type = 2
 raycast = NodePath("../../Camera3D/RayCast3D")
 
@@ -78,7 +75,7 @@ spawn_path = NodePath("..")
 spawn_limit = 1
 
 [node name="Melee" type="Node3D" parent="Head/Weapons" node_paths=PackedStringArray("raycast")]
-script = ExtResource("3_lfkkt")
+script = ExtResource("3_bcva7")
 raycast = NodePath("../../Camera3D/RayCast3D")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Head/Weapons/Melee"]

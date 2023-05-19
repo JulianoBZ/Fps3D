@@ -134,13 +134,13 @@ animations = [{
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mh32k"]
 properties/0/path = NodePath(".:position")
-properties/0/spawn = false
+properties/0/spawn = true
 properties/0/sync = true
 properties/1/path = NodePath(".:process_mode")
-properties/1/spawn = false
+properties/1/spawn = true
 properties/1/sync = true
 properties/2/path = NodePath(".:monitoring")
-properties/2/spawn = false
+properties/2/spawn = true
 properties/2/sync = true
 
 [node name="explosion" type="Area3D"]
@@ -166,6 +166,10 @@ hit_from_inside = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_mh32k")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="animation_finished" from="AnimatedSprite3D" to="." method="_on_animated_sprite_3d_animation_finished"]

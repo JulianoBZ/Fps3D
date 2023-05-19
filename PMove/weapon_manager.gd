@@ -9,6 +9,7 @@ var melee = preload("res://Weapons/unarmed.tscn").instantiate()
 var machine_gun = preload("res://Weapons/machine_gun.tscn")
 var shotgun = preload("res://Weapons/shotgun.tscn")
 var grenade_launcher = preload("res://Weapons/grenade_launcher.tscn")
+var rail_gun = preload("res://Weapons/rail_gun.tscn")
 
 var primary_weapon
 var secondary_weapon
@@ -46,17 +47,21 @@ func set_loadout(wn1,wn2,wn3):
 func _process(_delta):
 	if has_loadout == false:
 		primary_weapon = get_parent().get_parent().primary_weapon
+		secondary_weapon = get_parent().get_parent().secondary_weapon
 		#print("Primary:",primary_weapon)
 		match primary_weapon:
-			"Machine Gun":
-				primary_node = machine_gun.instantiate()
-			"Shotgun":
-				primary_node = shotgun.instantiate()
+			"Rail Gun":
+				primary_node = rail_gun.instantiate()
 			"Grenade Launcher":
 				primary_node = grenade_launcher.instantiate()
+		match secondary_weapon:
+			"Machine Gun":
+				secondary_node = machine_gun.instantiate()
+			"Shotgun":
+				secondary_node = shotgun.instantiate()
 		
 		current_weapon = 1
-		set_loadout(primary_node,pistol_a,melee)
+		set_loadout(primary_node,secondary_node,melee)
 		
 		has_loadout = true
 	

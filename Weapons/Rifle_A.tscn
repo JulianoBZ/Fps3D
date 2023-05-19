@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c1knmk0f14p6a"]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://Weapon_Node.gd" id="1_uhyx8"]
 [ext_resource type="Script" path="res://weapon_scripts/Rifle_A_Logic.gd" id="2_ottc8"]

@@ -1,6 +1,6 @@
 extends Node
 
-func line(pos1: Vector3, pos2: Vector3, color = Color.WHITE_SMOKE) -> MeshInstance3D:
+func line(pos1: Vector3, pos2: Vector3,parent, color = Color.WHITE_SMOKE) -> MeshInstance3D:
 	var mesh_instance := MeshInstance3D.new()
 	var immediate_mesh := ImmediateMesh.new()
 	var material := ORMMaterial3D.new()
@@ -16,7 +16,7 @@ func line(pos1: Vector3, pos2: Vector3, color = Color.WHITE_SMOKE) -> MeshInstan
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.albedo_color = color
 	
-	get_tree().get_root().add_child(mesh_instance)
+	parent.add_child(mesh_instance)
 	
 	return mesh_instance
 
