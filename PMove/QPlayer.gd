@@ -15,7 +15,7 @@ var head
 var speedLabel
 var grounded = false
 var wishJump = false
-@export var health = 1000
+@export var health = 100
 @onready var Cmd = $Cmd
 
 # Movement Varabiles
@@ -62,6 +62,9 @@ func _ready():
 		
 		primary_weapon = Global.desired_primary
 		sync.primary_weapon = primary_weapon
+		
+		secondary_weapon = Global.desired_secondary
+		sync.secondary_weapon = secondary_weapon
 
 func _input(event):
 	if sync.is_multiplayer_authority():
@@ -99,51 +102,92 @@ func _physics_process(delta):
 		speedLabel.text = str(playerVelocity.length())
 		speedLabel.text += "\n "+str(" X: ",rotation_degrees.y," - "," Y: ",$Head.rotation_degrees.x)
 		
+		
 		##################
 		sync.position = position
 		sync.rotation = rotation
 		
 		sync.primary_weapon = primary_weapon
+		sync.secondary_weapon = secondary_weapon
 		
-		$Label3D.text = str(sync.get_multiplayer_authority())+"/"+str(sync.health)
+		$Label3D.text = str(sync.get_multiplayer_authority())+"/"+str(health)
 		
 		if Input.is_action_just_pressed("kys"):
 			health = 0
-		death()
+		
+		if health <= 0:
+			#if multiplayer.is_server():
+			#	death()
+			#else:
+			death()
+			#rpc_id(1,"death_from_server")
+				
 ###############################################################
 
+#Qualquer peer pode chamar a função de dano
 @rpc("any_peer")
 func take_damage(dmg):
 	health -= dmg
+
+#O servidor apaga o avatar do jogador e manda o jogador para a tela de seleção
+@rpc("any_peer","call_local")
+func death_from_server():
+	#rpc_id(id,"death")
+	queue_free()
+
+#Jogador sendo mandado para a tela de seleção
+#@rpc("any_peer","call_local")
+func death():
+	Global.world_camera.make_current()
+	Global.world_spawn_hud.show()
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	#if !multiplayer.is_server():
+	queue_free()
+	rpc_id(1,"death_from_server")
+	
+	
+
 
 #get_parent().player.take_knockback(Vector3(get_parent().raycast_path.global_rotation.y/PI,
 #									-get_parent().raycast_path.global_rotation.x/PI,0),20,10)
 
 @rpc("any_peer")
-func take_knockback(wishdir,wishspeed,accel):
-	if wishdir.x >= 0:
-		wishdir.x -= 180
-	else:
-		wishdir.x += 180
+func take_knockback(wishdir,speed, accel,type):
+	print("Wish Degs: ",wishdir)
+	#Type 1 = Shotgun
+	#Type 2 = Explosão
+	match type:
+		1:
+			wishdir.y /= 90
+			
+			#Não me pergunte por que 90, mas funcionou
+			#Pegando os seno e cosseno dos radianos do grau X fornecido
+			var dir = wishdir.x + 90
+			var cos = cos(deg_to_rad(dir))
+			var sen = sin(deg_to_rad(dir))
+			
+			#Pega a wishdir.y e faz uma relação onde  quanto mais Y, menos X/Z, e vice versa
+			var relative = wishdir.y
+			var y_check
+			if relative < 0:
+				relative = abs(relative)
+			y_check = abs(relative - 1)
+			
+			wishdir.z = sen * (y_check)
+			wishdir.x = cos * (y_check)
+			
+		2:
+			var dir = wishdir.x + 180
+			var cos = cos(deg_to_rad(dir))
+			var sen = sin(deg_to_rad(dir))
+			
+			wishdir.z = cos
+			wishdir.x = sen
+			wishdir.y /= 90
 	
-	if wishdir.y >= 0:
-		wishdir.y -= 90
-	else:
-		wishdir.y += 90
-	
-	print(" Quaternion: ",get_quaternion())
-	wishdir.x /= 180
-	wishdir.y /= 90
 	print("knockback dir: ",wishdir)
 	
-	accelerate(wishdir, wishspeed, accel)
-
-func death():
-	if health <= 0:
-		queue_free()
-		Global.world_camera.make_current()
-		Global.world_spawn_hud.show()
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	accelerate(wishdir, speed, accel)
 
 
 ############################################################
@@ -222,6 +266,7 @@ func GroundMove():
 			wishJump = false
 			$AudioStreamPlayer.play()
 		
+		speedLabel.text += str("Direction: ",wishdir)
 
 func ApplyFriction(t : float):
 	if sync.is_multiplayer_authority():

@@ -1,0 +1,73 @@
+[gd_scene load_steps=8 format=3 uid="uid://cwwxnotsq4xhk"]
+
+[ext_resource type="Script" path="res://Weapons/rail_trail.gd" id="1_fi1k5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h7yyo"]
+transparency = 1
+albedo_color = Color(0.227451, 0.603922, 0.054902, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dldvs"]
+material = SubResource("StandardMaterial3D_h7yyo")
+
+[sub_resource type="Animation" id="Animation_e38d0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:mesh:material:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.227451, 0.603922, 0.054902, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nf5pg"]
+resource_name = "fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:mesh:material:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.227451, 0.603922, 0.054902, 1), Color(0.227451, 0.603922, 0.054902, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_porm2"]
+_data = {
+"RESET": SubResource("Animation_e38d0"),
+"fade_out": SubResource("Animation_nf5pg")
+}
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ndqys"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/2/path = NodePath(".:scale")
+properties/2/spawn = true
+properties/2/sync = true
+
+[node name="rail_trail" type="MeshInstance3D"]
+transform = Transform3D(0.100375, 0, 0, 0, 0.100375, 0, 0, 0, 0.100375, 0, 0, 0)
+visible = false
+mesh = SubResource("CylinderMesh_dldvs")
+script = ExtResource("1_fi1k5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_porm2")
+}
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_ndqys")
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Global="*res://global.tscn"
 Network="*res://network.tscn"
 Draw3d="*res://Tools/Draw3D.gd"
+QAL="*res://qal.tscn"
 
 [display]
 

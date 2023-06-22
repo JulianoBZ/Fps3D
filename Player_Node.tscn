@@ -1,10 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://bo6g1cwmqcb56"]
+[gd_scene load_steps=3 format=3 uid="uid://bo6g1cwmqcb56"]
 
 [ext_resource type="Script" path="res://Player_Node.gd" id="1_unbw2"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hfv40"]
+properties/0/path = NodePath(".:P_Name")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:kills")
+properties/1/spawn = true
+properties/1/sync = true
+properties/2/path = NodePath(".:deaths")
+properties/2/spawn = true
+properties/2/sync = true
+properties/3/path = NodePath(".:ping")
+properties/3/spawn = true
+properties/3/sync = true
 
 [node name="Player_Node" type="Node3D"]
 script = ExtResource("1_unbw2")
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://PMove/QPlayer.tscn")
-spawn_path = NodePath("..")
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_hfv40")

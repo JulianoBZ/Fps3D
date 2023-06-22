@@ -7,11 +7,11 @@ var direct_damage = 30
 
 var explosion = preload("res://Weapons/explosion.tscn")
 
-#func _ready():
-#	add_collision_exception_with(shooter)
+func _ready():
+	show()
 
 func _on_body_entered(_body):
-	if is_inside_tree():
+	if multiplayer.is_server():
 		if _body.name == shooter:
 			add_collision_exception_with(_body)
 		if _body.name != shooter:
@@ -31,7 +31,6 @@ func _on_body_entered(_body):
 				#else:
 					#rpc_id(1,"explosion_from_server",global_position,shooter)
 		#self.queue_free()
-		pass # Replace with function body.
 
 @rpc("any_peer","call_local")
 func explosion_from_server(pos,sht):

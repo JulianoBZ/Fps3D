@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ba1o6s1b4e6dd"]
+
+[ext_resource type="Script" path="res://qal.gd" id="1_h7wra"]
+
+[node name="QAL" type="Node"]
+script = ExtResource("1_h7wra")

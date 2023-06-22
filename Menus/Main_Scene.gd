@@ -33,11 +33,13 @@ func load_names(file):
 ##############################################
 
 func _on_host_button_pressed():
+	Global.P_Name = $Nickname/Player_name_insert.text
 	if (Network.start_server(PORT) == true):
 		Network.loaded_map = map_test_path
 		start_game(load(Network.loaded_map).instantiate())
 
 func _on_join_button_pressed():
+	Global.P_Name = $Nickname/Player_name_insert.text
 	if (Network.connect_to_server(str($IP_address_insert.text), PORT)) == true:
 		self.hide()
 	#start_game(Network.loaded_map)

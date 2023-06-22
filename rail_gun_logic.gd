@@ -6,8 +6,9 @@ var fire_rate = 1.6
 
 @onready var bullet_impact = preload("res://Weapons/bullet_impact.tscn")
 @onready var coil = preload("res://Weapons/coil.tscn")
+@onready var trail = preload("res://Weapons/rail_trail.tscn")
 
-var weapon_name = "Machine Gun"
+var weapon_name = "Gauss Gun"
 var ammo_reserve_max = 20
 var ammo_reserve = 20
 var ammo_clip_max = 20
@@ -50,9 +51,7 @@ func Fire(rc):
 				#print(get_parent().player.multiplayer.is_multiplayer_authority())
 			
 			#Spawnar um efeito no local de impacto
-			rpc("spawn_bullet_impact",rc.get_collision_point())
-			rpc("draw_coil",rc.get_collision_point())
-			
+			rpc_id(1,"coil_from_server",rc.get_collision_point(),self.global_position)
 			#Reseta o desvio do raycast
 			#rc.set_rotation_degrees(Vector3(0,0,0))
 		
@@ -61,10 +60,18 @@ func Fire(rc):
 			can_fire = false
 
 @rpc("any_peer","call_local")
-func draw_coil(collision):
-	var c = coil.instantiate()
-	Global.Effects.add_child(c)
-	Draw3d.line(global_position, collision,c, Color.CRIMSON)
+func coil_from_server(col,s_pos):
+	var trail_scale = s_pos.distance_to(col) * 0.5
+	draw_coil(col,s_pos,trail_scale)
+
+func draw_coil(collision,start_pos,trail_scale):
+	var t = QAL.trail.instantiate()
+	Global.Effects.add_child(t, true)
+	t.scale.y = trail_scale
+	#print(t.height)
+	
+	t.look_at_from_position((start_pos + collision)*0.5,collision)
+	t.rotation_degrees.x += 90
 	pass
 
 @rpc("any_peer","call_local")

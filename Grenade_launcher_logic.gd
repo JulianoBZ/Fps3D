@@ -6,7 +6,7 @@ var fire_rate = 0.85
 @onready var fire_timer = $fire_timer
 @onready var animation_player = get_parent().get_node("AnimationPlayer")
 
-@onready var grenade = preload("res://Weapons/grenade.tscn")
+#@onready var grenade = preload("res://Weapons/grenade.tscn")
 
 var weapon_name = "Grenade Launcher"
 var ammo_reserve_max = 15
@@ -70,7 +70,7 @@ func grenade_from_server(proj_dir,f_position,global_pos,shooter):
 
 #@rpc("any_peer","call_local")
 func spawn_grenade(proj_dir,f_position,global_pos,shooter):
-	var gr = grenade.instantiate()
+	var gr = QAL.grenade.instantiate()
 	Global.Effects.add_child(gr, true)
 	gr.global_position = global_pos
 	gr.apply_impulse((-proj_dir * projectile_velocity),f_position)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=8 format=3 uid="uid://e4mc1l2too6y"]
 
 [ext_resource type="Script" path="res://weapon_scripts/Weapon_Node.gd" id="1_hp3p0"]
 [ext_resource type="Script" path="res://weapon_scripts/Pistol_A_Logic.gd" id="2_tfc1j"]

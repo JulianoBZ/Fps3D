@@ -43,8 +43,8 @@ func Fire(rc):
 			get_parent().get_parent().update_weapon_state(ammo_reserve,ammo_clip)
 			
 			#Calcula desvio
-			var deviation_x = randf_range(-2,2)
-			var deviation_y = randf_range(-2,2)
+			var deviation_x = randf_range(-1,1)
+			var deviation_y = randf_range(-1,1)
 			rc.set_rotation_degrees(Vector3(deviation_x,deviation_y,0))
 			
 			#Verifica quem foi atingido e aplica dano
@@ -52,9 +52,12 @@ func Fire(rc):
 			if target != null && target.is_in_group("Player"):
 				target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
 				#print(get_parent().player.multiplayer.is_multiplayer_authority())
-			
-			#Spawnar um efeito no local de impacto
-			rpc("spawn_bullet_impact",rc.get_collision_point())
+				
+			if get_parent().player.sync.get_multiplayer_authority() == 1:
+				#Spawnar um efeito no local de impacto
+				spawn_bullet_impact(rc.get_collision_point())
+			else:
+				rpc_id(1,"impact_from_server",rc.get_collision_point())
 			
 			#Reseta o desvio do raycast
 			#rc.set_rotation_degrees(Vector3(0,0,0))
@@ -62,12 +65,14 @@ func Fire(rc):
 			#Timer de taxa de disparo
 			fire_timer.start(fire_rate)
 			can_fire = false
-		
 
 @rpc("any_peer","call_local")
+func impact_from_server(col):
+	spawn_bullet_impact(col)
+
 func spawn_bullet_impact(collision):
-	var bi = bullet_impact.instantiate()
-	Global.add_child(bi, true)
+	var bi = QAL.bullet_impact.instantiate()
+	Global.Effects.add_child(bi, true)
 	bi.global_position = collision
 	#bi.look_at(rc.get_collision_point() + rc.get_collision_normal())
 

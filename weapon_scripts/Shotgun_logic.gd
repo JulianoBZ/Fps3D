@@ -35,27 +35,31 @@ func initialize_weapon_manager():
 
 #Sempre calcula se shoot() está disponível baseado em can_fire e raycast inserido
 func _process(_delta):
-	if Input.is_action_pressed("shoot") && get_parent().is_equipped == true && get_parent().get_parent().get_parent().get_parent().get_parent().sync.is_multiplayer_authority():
-		Fire(get_parent().raycast_path,1)
-		fire_timer.start(fire_rate*1)
-		can_fire = false
-	if Input.is_action_pressed("shoot2") && get_parent().is_equipped == true && get_parent().get_parent().get_parent().get_parent().get_parent().sync.is_multiplayer_authority():
-		Fire(get_parent().raycast_path,2)
-		get_parent().player.take_knockback(Vector3(get_parent().player.rotation_degrees.y,get_parent().player.get_node("Head").rotation_degrees.x,0),30,30)
-		#print(get_parent().player.get_node("Head").rotation_degrees.x," - ", get_parent().player.rotation_degrees.y)
-		fire_timer.start(fire_rate*2)
-		can_fire = false
-		#Referencia
-		#body.take_knockback(Vector3(-$RayCast3D.global_rotation.y/PI,$RayCast3D.global_rotation.x/PI,0), damage*1.5, damage*2)
+	if can_fire:
+		if Input.is_action_just_pressed("shoot") && get_parent().is_equipped == true && get_parent().get_parent().get_parent().get_parent().get_parent().sync.is_multiplayer_authority():
+			Fire(get_parent().raycast_path,1)
+			fire_timer.start(fire_rate*1)
+			can_fire = false
+		if Input.is_action_just_pressed("shoot2") && get_parent().is_equipped == true && get_parent().get_parent().get_parent().get_parent().get_parent().sync.is_multiplayer_authority():
+			Fire(get_parent().raycast_path,2)
+			#print(get_parent().player.get_node("Head").rotation_degrees.x," - ", get_parent().player.rotation_degrees.y)
+			fire_timer.start(fire_rate*2)
+			can_fire = false
+			#Referencia
+			#body.take_knockback(Vector3(-$RayCast3D.global_rotation.y/PI,$RayCast3D.global_rotation.x/PI,0), damage*1.5, damage*2)
 	if animation_player.is_playing && get_parent().is_equipped == false:
 		animation_player.stop()
 
 func Fire(rc,type):
 	#Checagem se o jogador é a autoridade multiplayer, se está equipado, e se está pressionando botão de tiro
-		if can_fire && ammo_clip > type && can_fire:
+		if ammo_clip > type && can_fire:
 			#Tira 1 bala do pente
 			ammo_clip -= type
 			get_parent().get_parent().update_weapon_state(ammo_reserve,ammo_clip)
+			
+			if type == 2:
+				#Aplica Knockback
+				get_parent().player.take_knockback(Vector3(-get_parent().player.rotation_degrees.y,-get_parent().player.get_node("Head").rotation_degrees.x,0),30,90,1)
 			
 			#Desvio das pellets de acordo com o tipo de tiro
 			var dev = 3 * type
@@ -76,11 +80,18 @@ func Fire(rc,type):
 						#print(get_parent().player.multiplayer.is_multiplayer_authority())
 					
 					#Spawnar um efeito no local de impacto
-					rpc("spawn_bullet_impact",each.get_collision_point())
+					if get_parent().player.sync.get_multiplayer_authority() == 1:
+						spawn_bullet_impact(rc.get_collision_point())
+					else:
+						rpc_id(1,"impact_from_server",rc.get_collision_point())
+
 
 @rpc("any_peer","call_local")
+func impact_from_server(col):
+	spawn_bullet_impact(col)
+
 func spawn_bullet_impact(collision):
-	var bi = bullet_impact.instantiate()
+	var bi = QAL.bullet_impact.instantiate()
 	Global.Effects.add_child(bi, true)
 	bi.global_position = collision
 
