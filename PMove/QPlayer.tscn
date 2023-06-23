@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://6dlm4o4pha4b"]
+[gd_scene load_steps=11 format=3 uid="uid://6dlm4o4pha4b"]
 
 [ext_resource type="Script" path="res://PMove/QPlayer.gd" id="1_vsa8p"]
 [ext_resource type="Script" path="res://PMove/weapon_manager.gd" id="2_42aew"]
 [ext_resource type="Script" path="res://PMove/cmd.gd" id="2_kxnac"]
 [ext_resource type="Script" path="res://weapon.gd" id="3_lfkkt"]
+[ext_resource type="Script" path="res://Mapping/TabScore.gd" id="5_2bfft"]
 [ext_resource type="PackedScene" uid="uid://chmgiae1nj11t" path="res://Weapons/hud.tscn" id="5_s0b5w"]
 [ext_resource type="Script" path="res://PMove/PlayerSync.gd" id="6_1nfw2"]
 
@@ -87,6 +88,32 @@ spawn_limit = 1
 
 [node name="HUD" parent="Head" instance=ExtResource("5_s0b5w")]
 visible = false
+
+[node name="TabScore" type="Control" parent="Head/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_2bfft")
+
+[node name="TabContainer" type="VBoxContainer" parent="Head/HUD/TabScore"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -446.5
+offset_top = -279.0
+offset_right = 446.5
+offset_bottom = 279.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 42
 
 [node name="Body" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_s8q0e")

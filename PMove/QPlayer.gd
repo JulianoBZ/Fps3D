@@ -113,7 +113,8 @@ func _physics_process(delta):
 		$Label3D.text = str(sync.get_multiplayer_authority())+"/"+str(health)
 		
 		if Input.is_action_just_pressed("kys"):
-			health = 0
+			take_damage(100,str(self.name))
+			health -= 100
 		
 		if health <= 0:
 			#if multiplayer.is_server():
@@ -126,13 +127,17 @@ func _physics_process(delta):
 
 #Qualquer peer pode chamar a função de dano
 @rpc("any_peer")
-func take_damage(dmg):
+func take_damage(dmg,from):
 	health -= dmg
+	if health <= 0:
+		rpc_id(1,"score_kill_from_server",from)
+		death()
 
 #O servidor apaga o avatar do jogador e manda o jogador para a tela de seleção
 @rpc("any_peer","call_local")
-func death_from_server():
+func death_from_server(dead):
 	#rpc_id(id,"death")
+	Global.get_node("PlayerInfo").get_node(str(dead)).deaths += 1
 	queue_free()
 
 #Jogador sendo mandado para a tela de seleção
@@ -142,11 +147,12 @@ func death():
 	Global.world_spawn_hud.show()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	#if !multiplayer.is_server():
-	queue_free()
-	rpc_id(1,"death_from_server")
-	
-	
+	#queue_free()
+	rpc_id(1,"death_from_server",self.name)
 
+@rpc("any_peer","call_local")
+func score_kill_from_server(from):
+	Global.get_node("PlayerInfo").get_node(str(from)).kills += 1
 
 #get_parent().player.take_knockback(Vector3(get_parent().raycast_path.global_rotation.y/PI,
 #									-get_parent().raycast_path.global_rotation.x/PI,0),20,10)
@@ -185,7 +191,6 @@ func take_knockback(wishdir,speed, accel,type):
 			wishdir.x = sen
 			wishdir.y /= 90
 	
-	print("knockback dir: ",wishdir)
 	
 	accelerate(wishdir, speed, accel)
 

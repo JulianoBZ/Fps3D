@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://7bhlmbd7sk71"]
+
+[node name="TabPlayer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -917.0
+offset_bottom = -678.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Back" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 436.0
+offset_bottom = 40.0
+color = Color(0.266667, 0.266667, 0.266667, 0.47451)
+
+[node name="PName" type="Label" parent="."]
+layout_mode = 0
+offset_right = 225.0
+offset_bottom = 40.0
+
+[node name="PKD" type="Label" parent="."]
+layout_mode = 0
+offset_left = 262.0
+offset_right = 361.0
+offset_bottom = 40.0
+
+[node name="PPing" type="Label" parent="."]
+layout_mode = 0
+offset_left = 360.0
+offset_right = 433.0
+offset_bottom = 40.0
