@@ -22,7 +22,7 @@ func _on_body_entered(_body):
 			#	rpc_id(1,"explosion_from_server",global_position,shooter)
 			#self.queue_free()
 			if _body.is_in_group("Player") && (str(_body.get_multiplayer_authority()) != shooter):
-				_body.take_damage(direct_damage)
+				_body.take_damage(direct_damage, str(shooter))
 				#if shooter == str(1):
 			if shooter == str(1):
 				spawn_explosion(global_position,shooter)

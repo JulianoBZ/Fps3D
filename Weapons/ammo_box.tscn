@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://bwde8k25y1ya4"]
+
+[ext_resource type="Script" path="res://Ammo_Box.gd" id="1_hieus"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bmuc7"]
+size = Vector3(0.5, 0.2, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tdkym"]
+size = Vector3(0.5, 0.2, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w82x5"]
+size = Vector3(0.8, 0.5, 0.6)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_tw2c7"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+
+[node name="Ammo_Box" type="RigidBody3D"]
+script = ExtResource("1_hieus")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_bmuc7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_tdkym")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="Range" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_w82x5")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_tw2c7")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

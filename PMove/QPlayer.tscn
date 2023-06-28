@@ -61,30 +61,15 @@ script = ExtResource("3_lfkkt")
 type = 1
 raycast = NodePath("../../Camera3D/RayCast3D")
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Head/Weapons/Primary"]
-_spawnable_scenes = PackedStringArray("res://Weapons/machine_gun.tscn")
-spawn_path = NodePath("..")
-spawn_limit = 1
-
 [node name="Secondary" type="Node3D" parent="Head/Weapons" node_paths=PackedStringArray("raycast")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.206, 0, -0.597)
 script = ExtResource("3_lfkkt")
 type = 2
 raycast = NodePath("../../Camera3D/RayCast3D")
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Head/Weapons/Secondary"]
-_spawnable_scenes = PackedStringArray("res://Weapons/Pistol_A.tscn")
-spawn_path = NodePath("..")
-spawn_limit = 1
-
 [node name="Melee" type="Node3D" parent="Head/Weapons" node_paths=PackedStringArray("raycast")]
 script = ExtResource("3_lfkkt")
 raycast = NodePath("../../Camera3D/RayCast3D")
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Head/Weapons/Melee"]
-_spawnable_scenes = PackedStringArray("res://Weapons/unarmed.tscn")
-spawn_path = NodePath("..")
-spawn_limit = 1
 
 [node name="HUD" parent="Head" instance=ExtResource("5_s0b5w")]
 visible = false

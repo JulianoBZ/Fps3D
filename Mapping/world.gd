@@ -48,7 +48,6 @@ func _process(_delta):
 	
 
 func _on_spawn_button_pressed():
-	
 	if multiplayer.is_server():
 		Global.desired_class = str(player_class_group.get_pressed_button().name)
 		Global.desired_primary = str(player_primary_group.get_pressed_button().name)

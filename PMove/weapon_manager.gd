@@ -92,3 +92,8 @@ func change_weapon():
 			each.is_equipped = false
 			each.hide()
 
+
+func max_ammo():
+	$Primary.add_ammo()
+	$Secondary.add_ammo()
+	print("a")

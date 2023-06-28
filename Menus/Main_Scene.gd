@@ -35,8 +35,10 @@ func load_names(file):
 func _on_host_button_pressed():
 	Global.P_Name = $Nickname/Player_name_insert.text
 	if (Network.start_server(PORT) == true):
+		#Network.connect_to_server(str($IP_address_insert.text), 1234)
 		Network.loaded_map = map_test_path
 		start_game(load(Network.loaded_map).instantiate())
+		
 
 func _on_join_button_pressed():
 	Global.P_Name = $Nickname/Player_name_insert.text
@@ -49,5 +51,8 @@ func start_game(map):
 	Global.level.add_child(map)
 	self.hide()
 
-
-
+func _on_main_connect_pressed():
+	if (Network.connect_to_server("192.168.0.15", 1234) == true):
+		#print(Network.connect_to_server("192.168.0.15", 1234))
+		#Network.rpc_id(1,"request_server_list",multiplayer.get_unique_id())
+		$Server_list.text = str(Global.server_list)

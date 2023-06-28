@@ -37,10 +37,10 @@ func apply_damage(body):
 			$RayCast3D.look_at(body.global_position)
 			print($RayCast3D.rotation_degrees)
 			if body.sync.get_multiplayer_authority() == 1:
-				body.take_damage(damage)
+				body.take_damage(damage, str(shooter))
 				body.take_knockback(Vector3($RayCast3D.rotation_degrees.y,$RayCast3D.rotation_degrees.x,0), damage*2, damage*4,2)
 			else:
-				body.take_damage.rpc_id(body.sync.get_multiplayer_authority(), damage)
+				body.take_damage.rpc_id(body.sync.get_multiplayer_authority(), damage, str(shooter))
 				body.take_knockback.rpc_id(body.sync.get_multiplayer_authority(),Vector3($RayCast3D.rotation_degrees.y,$RayCast3D.rotation_degrees.x,0), damage*2, damage*4,2)
 
 func _on_animated_sprite_3d_animation_finished():

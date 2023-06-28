@@ -15,3 +15,12 @@ var P_Name = "Player"
 @onready var Effects = $Effects
 @onready var world_camera = Node
 @onready var world_spawn_hud = Node
+
+#####Networking
+var server_name = "Server"
+var server_pass = ""
+var server_address = ""
+var server_slots = 6
+var is_hosting = false
+
+var server_list = []

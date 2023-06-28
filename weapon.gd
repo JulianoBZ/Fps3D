@@ -33,3 +33,6 @@ func set_weapon(wn):
 func update_weapon_state(ar,ac):
 	ammo_reserve = ar
 	ammo_clip = ac
+
+func add_ammo():
+	ammo_clip = ammo_reserve_max

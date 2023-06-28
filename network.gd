@@ -22,11 +22,15 @@ func _ready():
 
 func start_server(PORT):
 	var peer = ENetMultiplayerPeer.new()
-	peer.create_server(PORT)
+	peer.create_server(PORT, Global.server_slots)
 	if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
 		OS.alert("Failed to start multiplayer server.")
 		return
 	multiplayer.multiplayer_peer = peer
+	#Conectando com o servidor de listagem
+	connect_to_server("192.168.0.15", 1234)
+	Global.is_hosting = true
+	
 	add_player(1,Global.P_Name)
 	return true
 
@@ -47,6 +51,10 @@ func connect_to_server(IP_address, PORT):
 
 func connected_to_server():
 	rpc_id(1,"add_player",multiplayer.get_unique_id(),Global.P_Name)
+	if Global.is_hosting == true:
+		rpc_id(1,"add_server_to_list",[Global.server_address,Global.server_name])
+	else:
+		rpc_id(1,"request_server_list", multiplayer.get_unique_id())
 #	print(Network.sync.loaded_map)
 #	sync.loaded_map = loaded_map
 #	Global.level.add_child(load(Network.loaded_map).instantiate())
@@ -82,3 +90,21 @@ func _exit_tree():
 		return
 	multiplayer.peer_connected.disconnect(add_player)
 	multiplayer.peer_disconnected.disconnect(del_player)
+
+func push_data(data):
+	rpc("add_server_to_list",data)
+
+@rpc("call_remote")
+func add_server_to_list(data):
+	pass
+
+func retrieve_info():
+	rpc_id(1,"send_server_list")
+
+@rpc("call_remote","any_peer")
+func request_server_list(id):
+	pass
+
+@rpc("call_remote","any_peer")
+func receive_server_list(list):
+	Global.server_list = list

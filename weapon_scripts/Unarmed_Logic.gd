@@ -28,9 +28,7 @@ func Fire(rc):
 			var target = rc.get_collider()
 			#Só aplica o dano se o target estiver dentro de um range
 			if target != null && target.is_in_group("Enemy") && get_parent().player.global_position.distance_to(target.global_position) < range:
-				target.health -= damage
-				print(target,weapon_name)
-				print(get_parent().player.global_position.distance_to(target.global_position))
+				target.take_damage.rpc_id(target.get_multiplayer_authority(), damage, str(get_parent().player.name))
 			timer.start(fire_rate)
 			can_fire = false
 

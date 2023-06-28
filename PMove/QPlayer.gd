@@ -140,9 +140,15 @@ func death_from_server(dead):
 	Global.get_node("PlayerInfo").get_node(str(dead)).deaths += 1
 	queue_free()
 
+func spawn_ammo_box(pos):
+	var ab = QAL.ammo_box.instantiate()
+	Global.Effects.add_child(ab, true)
+	ab.global_position = pos
+
 #Jogador sendo mandado para a tela de seleção
 #@rpc("any_peer","call_local")
 func death():
+	spawn_ammo_box(global_position)
 	Global.world_camera.make_current()
 	Global.world_spawn_hud.show()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -156,6 +162,9 @@ func score_kill_from_server(from):
 
 #get_parent().player.take_knockback(Vector3(get_parent().raycast_path.global_rotation.y/PI,
 #									-get_parent().raycast_path.global_rotation.x/PI,0),20,10)
+
+func max_ammo():
+	$Head/Weapons.max_ammo()
 
 @rpc("any_peer")
 func take_knockback(wishdir,speed, accel,type):

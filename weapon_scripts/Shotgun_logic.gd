@@ -76,7 +76,7 @@ func Fire(rc,type):
 					#Verifica quem foi atingido e aplica dano
 					var target = each.get_collider()
 					if target != null && target.is_in_group("Player"):
-						target.take_damage.rpc_id(target.get_multiplayer_authority(), damage)
+						target.take_damage.rpc_id(target.get_multiplayer_authority(), damage, str(get_parent().player.name))
 						#print(get_parent().player.multiplayer.is_multiplayer_authority())
 					
 					#Spawnar um efeito no local de impacto
